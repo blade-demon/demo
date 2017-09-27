@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Gamepoch电竞助手
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-lines>
+    <ion-item>
+      <ion-label><ion-icon ios="ios-megaphone" md="md-megaphone"> 赛事</ion-icon></ion-label>
+      <ion-select [(ngModel)]="matches">
+        <ion-option value="nes">NBA 2K18上海站</ion-option>
+        <ion-option value="n64">NBA 2K18北京站</ion-option>
+        <ion-option value="ps">NBA 2K18南京站</ion-option>
+        <ion-option value="genesis">NBA 2K18广州站</ion-option>
+        <ion-option value="saturn">NBA 2K18武汉站</ion-option>
+        <ion-option value="snes">NBA 2K18深圳站</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><ion-icon ios="ios-locate" md="md-locate"> 场地</ion-icon></ion-label>
+      <ion-select [(ngModel)]="location">
+        <ion-option value="nes">人民广场</ion-option>
+        <ion-option value="n64">外滩</ion-option>
+        <ion-option value="ps">环球港</ion-option>
+        <ion-option value="genesis">梅赛德斯奔驰中心</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><ion-icon ios="ios-calendar" md="md-calendar"> 日期</ion-icon></ion-label>
+      <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="event.month"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><ion-icon ios="ios-information-circle" md="md-information-circle"> 比赛介绍</ion-icon></ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-1></ion-col>
+      <ion-col col-10>
+        <button full ion-button icon-right>下一步<ion-icon ios="ios-arrow-forward" md="md-arrow-forward"></ion-icon></button>
+      </ion-col>
+      <ion-col col-1></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!--ion-list>
+    <button ion-item *ngFor="let item of items" (click)="itemSelected(item)">
+      {{item.text}}
+    </button>
+  </ion-list-->
+</ion-content>
