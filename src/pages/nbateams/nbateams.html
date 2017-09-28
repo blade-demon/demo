@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      NBA球队选择
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+          <span ion-text color="primary" showWhen="ios">Cancel</span>
+          <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list radio-group>
+    <ion-item *ngFor="let team of teams" (click)="selectTeam(team)">
+      <ion-avatar item-start>
+        <img src="{{team.image}}">
+      </ion-avatar>
+      <h2>{{team.name}}</h2>
+    </ion-item>
+  </ion-list>
+</ion-content>

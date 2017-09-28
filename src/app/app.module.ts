@@ -8,12 +8,18 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { DetailPage } from '../pages/detail/detail';
 import { NBATeamsPage } from '../pages/nbateams/nbateams';
-
+import { PlayerLoginPage} from '../pages/playerLogin/playerLogin';
+import { PlayersPreparePage } from '../pages/playersPrepare/playersPrepare';
+import { GameCompletePage } from '../pages/gameComplete/gameComplete';
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    DetailPage
+    DetailPage,
+    NBATeamsPage,
+    PlayerLoginPage,
+    PlayersPreparePage,
+    GameCompletePage
   ],
   imports: [
     BrowserModule,
@@ -23,7 +29,11 @@ import { NBATeamsPage } from '../pages/nbateams/nbateams';
   entryComponents: [
     MyApp,
     HomePage,
-    DetailPage
+    DetailPage,
+    NBATeamsPage,
+    PlayerLoginPage,
+    PlayersPreparePage,
+    GameCompletePage
   ],
   providers: [
     StatusBar,

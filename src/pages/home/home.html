@@ -37,6 +37,7 @@
 
     <ion-item>
       <ion-label><ion-icon ios="ios-information-circle" md="md-information-circle"> 比赛介绍</ion-icon></ion-label>
+      <ion-label>NBA 2K18官方赛是2KGAME与星游纪联合举办的比赛</ion-label>
     </ion-item>
   </ion-list>
 
@@ -44,15 +45,9 @@
     <ion-row>
       <ion-col col-1></ion-col>
       <ion-col col-10>
-        <button full ion-button icon-right>下一步<ion-icon ios="ios-arrow-forward" md="md-arrow-forward"></ion-icon></button>
+        <button full ion-button icon-right (click)="LoadPlayerLoginPage()">下一步<ion-icon ios="ios-arrow-forward" md="md-arrow-forward"></ion-icon></button>
       </ion-col>
       <ion-col col-1></ion-col>
     </ion-row>
   </ion-grid>
-
-  <!--ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemSelected(item)">
-      {{item.text}}
-    </button>
-  </ion-list-->
 </ion-content>

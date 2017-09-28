@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      球队选择
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item>
+          <ion-label>赛制选择</ion-label>
+          <ion-select [(ngModel)]="MatchRule">
+            <ion-option value="bo1">BO1</ion-option>
+            <ion-option value="bo3">BO3</ion-option>
+            <ion-option value="bo5">BO5</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+        <!-- Player1 -->
+        <ion-card>
+          <ion-item>
+            <ion-avatar item-start>
+              <img src="{{player1Info.playerimage}}">
+            </ion-avatar>
+            <h2>{{player1Info.playername}}</h2>
+            <p>{{player1Info.playerId}}</p>
+          </ion-item>
+
+          <img src="{{ player1Info.image }}" (click)="openModalSelectTeamFor1()">
+
+          <ion-card-content>
+            <p style="text-align:center">{{player1Info.team}}</p>
+          </ion-card-content>
+
+          <ion-row>
+            <!-- <button ion-button full >选择球队</button> -->
+          </ion-row>
+
+        </ion-card>
+        <!-- Player1 -->
+      </ion-col>
+      <ion-col col-6>
+        <!-- Player2 -->
+        <ion-card>
+          <ion-item>
+            <ion-avatar item-start>
+              <img src="{{player2Info.playerimage}}">
+            </ion-avatar>
+            <h2>{{player2Info.playername}}</h2>
+            <p>{{player2Info.playerId}}</p>
+          </ion-item>
+
+          <img src="{{player2Info.image}}" (click)="openModalSelectTeamFor2()">
+
+          <ion-card-content>
+            <p style="text-align:center">{{player2Info.team}}</p>
+          </ion-card-content>
+        </ion-card>
+        <!-- Player2 -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <button ion-button full (click)="startGame()">开始比赛</button>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
