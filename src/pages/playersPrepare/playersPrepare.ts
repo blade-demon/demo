@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 import { NBATeamsPage } from '../nbateams/nbateams';
 import { GameCompletePage } from '../gameComplete/gameComplete';
-
+import { NBATeamsService } from '../../services/nbateams.service';
 class PlayerPrepareInfo {
   playername: string;
   playerId: string;
@@ -38,7 +38,12 @@ export class PlayersPreparePage {
   teamsModalFor1: any;
   teamsModalFor2: any;
   MatchRule: any;
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+  nbateams: {name, image}[] = [];
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController, private nbateamsservice: NBATeamsService) {
+
+    this.nbateams = this.nbateamsservice.getNBATeams();
+    console.log(this.nbateamsservice.getNBATeams());
+
     this.MatchRule = "BO1";
     this.teamsModalFor1 = this.modalCtrl.create(NBATeamsPage);
     this.teamsModalFor2 = this.modalCtrl.create(NBATeamsPage);
