@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
 import { NavController, ViewController, NavParams } from 'ionic-angular';
-import { NBATeamsService } from '../../services/nbateams.service';
+import { NBATeamsService } from '../../providers/nbateams.service';
 @Component({
-  selector: 'page-nbateams',
-  templateUrl: 'nbateams.html'
+  selector: 'page-team-select',
+  templateUrl: 'team-select.html'
 })
 
-export class NBATeamsPage {
-  nbateams: {name, image}[] = [];
+export class TeamSelectPage {
+  teams: {name, image}[] = [];
   selectedTeam: any;
   constructor(public navCtrl: NavController,
               public viewCtrl: ViewController,
               public navParams: NavParams,
               private nbateamsservice: NBATeamsService) {
-    this.nbateams = this.nbateamsservice.getNBATeams();
+    this.teams = this.nbateamsservice.getNBATeams();
     console.log(this.nbateamsservice.getNBATeams());
   }
 

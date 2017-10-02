@@ -22,5 +22,4 @@ export class Players {
 
   delete(player: Player) {
   }
-
 }

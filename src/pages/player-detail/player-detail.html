@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>选手信息</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <div style="text-align:center">
+    <img src="{{player.headimg}}" alt="用户的头像" style="width:50%; border-radius:60%;">
+  </div>
+
+  <ion-list>
+    <ion-list-header>
+      <h2>{{player.name}}</h2>
+    </ion-list-header>
+    <ion-item>
+      <p>昵称：<strong>{{player.nickname}}</strong></p>
+    </ion-item>
+    <ion-item>
+      <p>选手ID：<strong>{{player.gamepochPlayerId}}</strong></p>
+    </ion-item>
+    <ion-item>
+      <p>选手资料：<strong>{{player.desc}}</strong></p>
+    </ion-item>
+  </ion-list>
+  <button ion-button full (click)="onAddToMatch()">添加</button>
+</ion-content>

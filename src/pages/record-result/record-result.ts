@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 @Component({
-  selector: 'page-gamecomplete',
-  templateUrl: 'gameComplete.html'
+  selector: 'page-record-result',
+  templateUrl: 'record-result.html'
 })
 
-export class GameCompletePage {
+export class RecordResultPage {
   matchInfo: any;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.matchInfo = navParams.get("matchInfo");

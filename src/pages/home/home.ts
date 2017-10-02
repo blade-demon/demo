@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { NavController, AlertController } from 'ionic-angular';
-import { PlayerLoginPage } from '../playerLogin/playerLogin';
-import { Api } from "../../services/api/api";
+import { NewMatchPage } from '../new-match/new-match';
+import { Api } from "../../providers/api/api";
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -26,7 +26,7 @@ export class HomePage {
 
   onSelectMatch(item) {
     if (item.status === '进行中') {
-      this.navCtrl.push(PlayerLoginPage, { match: item });
+      this.navCtrl.push(NewMatchPage, { tournament: item });
     } else {
       this.presentAlert(item.status);
     }

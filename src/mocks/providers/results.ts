@@ -34,7 +34,57 @@ export class Results {
   };
 
   constructor(public http: Http) {
-    let results = [];
+    let results = [{
+      "matchId": "657100911879",
+      "playerId":"1062619387",
+      "score": 86,
+      "gotShots": 13,
+      "shotTimes": 23,
+      "gotThreePointsShots": 2,
+      "threePointsShots": 2,
+      "gotPenaltyShots": 8,
+      "penaltyShots": 12,
+      "fastBreakScore": 10,
+      "freeThrowLaneScore": 16,
+      "secondAttackScore": 4,
+      "substituteScore": 0,
+      "assists": 5,
+      "offensiveRebounds": 5,
+      "defensiveRebounds": 12,
+      "steals": 3,
+      "blockShots": 2,
+      "turnovers": 0,
+      "turnoverScores": 11,
+      "teamFouls": 5,
+      "maxLeadScore": 27,
+      "possessionTime": "4:54",
+      "remainingPauses": 2
+    }, {
+      "matchId": "657100911879",
+      "playerId":"1062619387",
+      "score": 86,
+      "gotShots": 13,
+      "shotTimes": 23,
+      "gotThreePointsShots": 2,
+      "threePointsShots": 2,
+      "gotPenaltyShots": 8,
+      "penaltyShots": 12,
+      "fastBreakScore": 10,
+      "freeThrowLaneScore": 16,
+      "secondAttackScore": 4,
+      "substituteScore": 0,
+      "assists": 5,
+      "offensiveRebounds": 5,
+      "defensiveRebounds": 12,
+      "steals": 3,
+      "blockShots": 2,
+      "turnovers": 0,
+      "turnoverScores": 11,
+      "teamFouls": 5,
+      "maxLeadScore": 27,
+      "possessionTime": "4:54",
+      "remainingPauses": 2
+    }];
     // mock match result data
     for(let i = 0; i < 10; i++) {
       results.push(this.defaultResult);

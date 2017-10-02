@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
-import { NBATeamsPage } from '../nbateams/nbateams';
-import { GameCompletePage } from '../gameComplete/gameComplete';
-import { NBATeamsService } from '../../services/nbateams.service';
+import { TeamSelectPage } from '../team-select/team-select';
+import { RecordResultPage } from '../record-result/record-result';
 class PlayerPrepareInfo {
   playername: string;
   playerId: string;
@@ -38,15 +37,11 @@ export class PlayersPreparePage {
   teamsModalFor1: any;
   teamsModalFor2: any;
   MatchRule: any;
-  nbateams: {name, image}[] = [];
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController, private nbateamsservice: NBATeamsService) {
-
-    this.nbateams = this.nbateamsservice.getNBATeams();
-    console.log(this.nbateamsservice.getNBATeams());
-
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+    // 默认BO1游戏
     this.MatchRule = "BO1";
-    this.teamsModalFor1 = this.modalCtrl.create(NBATeamsPage);
-    this.teamsModalFor2 = this.modalCtrl.create(NBATeamsPage);
+    this.teamsModalFor1 = this.modalCtrl.create(TeamSelectPage);
+    this.teamsModalFor2 = this.modalCtrl.create(TeamSelectPage);
 
     this.teamsModalFor1.onDidDismiss(data => {
       // console.log("Player1选择的Team是：" + JSON.stringify(data.selectedTeam));
@@ -75,7 +70,7 @@ export class PlayersPreparePage {
   // 开始游戏
   startGame() {
     // console.log("开始游戏！");
-    this.navCtrl.push(GameCompletePage, {
+    this.navCtrl.push(RecordResultPage, {
       matchInfo: {
         matchRule: this.MatchRule,
         player1Info: this.player1Info,

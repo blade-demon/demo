@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>比赛纪录</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="addNewMatch()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <h2 style="text-align:center">{{tournamentName}}</h2>
+  <ion-list>
+    <ion-item>
+      <ion-label>选择赛制</ion-label>
+      <ion-select [(ngModel)]="gameRule" (ngModelChange)="gameRuleChagne($event)">
+        <ion-option value="BO1" selected>BO1</ion-option>
+        <ion-option value="BO3">BO3</ion-option>
+        <ion-option value="BO5">BO5</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-grid>
+        <ion-row style="text-align:center; align-items: center">
+          <ion-col col-3>
+            <img src="https://cdn-enterprise.discourse.org/ionicframework/user_avatar/forum.ionicframework.com/aaronksaunders/45/13729_1.png"
+              alt="选手1头像" (click)="selectPlayer1()">
+            <p>{{"选手1姓名"}}</p>
+            <small>{{"选手1Id"}}</small>
+          </ion-col>
+          <ion-col col-6>
+            {{gameRule}}
+          </ion-col>
+          <ion-col col-3>
+            <img src="https://cdn-enterprise.discourse.org/ionicframework/user_avatar/forum.ionicframework.com/aaronksaunders/45/13729_1.png"
+              alt="选手1头像" (click)="selectPlayer2()">
+            <p>{{"选手2姓名" }}</p>
+            <small>{{"选手2Id"}}</small>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
+    <!-- 显示所有比赛结果 -->
+    <ion-item *ngFor="let match of matches">
+      <!-- <ion-label>场次：{{match.index}}</ion-label> -->
+      <ion-grid>
+        <ion-row style="text-align:center; align-items: center">
+          <ion-col col-3>
+            <img src="" alt="球队图标" (click)="selectTeam()">
+          </ion-col>
+          <ion-col col-6>
+            <button ion-button icon-only (click)="onRecordResult()">
+              <ion-icon ios="ios-create" md="md-create"></ion-icon>
+            </button>
+          </ion-col>
+          <ion-col col-3>
+            <img src="" alt="球队图标" (click)="selectTeam()">
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <!-- 显示比赛结果 -->
+  </ion-list>
+  <!-- <ion-list>
+        <ion-item-group *ngFor="let player of players">
+            <ion-item-divider color="primary">选手</ion-item-divider>
+            <ion-item-sliding>
+                <ion-item>
+                    <ion-avatar item-start>
+                        <img src="{{player.headimg}}">
+                    </ion-avatar>
+                    <h2>{{player.nickname}}</h2>
+                    <span>{{player.userid}}</span>
+                    <button ion-button clear item-end (click)="remove(player)">
+                        <ion-icon ios="ios-trash" md="md-trash"></ion-icon>
+                    </button>
+                </ion-item>
+            </ion-item-sliding>
+            <ion-item></ion-item>
+        </ion-item-group>
+    </ion-list> -->
+</ion-content>

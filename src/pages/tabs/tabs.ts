@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { SearchPage } from '../search/search';
+import { DataPage } from '../data/data';
 import { SettingsPage } from '../settings/settings';
 import { HomePage } from '../home/home';
 
@@ -10,7 +10,7 @@ import { HomePage } from '../home/home';
 export class TabsPage {
 
   tab1Root = HomePage;
-  tab2Root = SearchPage;
+  tab2Root = DataPage;
   tab3Root = SettingsPage;
 
   constructor() {
