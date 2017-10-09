@@ -18,8 +18,7 @@ export class PlayerCreatePage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private api: Api,
-    private matchService : MatchServiceProvider) {
-  }
+    private matchService : MatchServiceProvider) {}
 
   ionViewDidLoad() {
     // console.log('ionViewDidLoad PlayerCreatePage');

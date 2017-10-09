@@ -2,34 +2,35 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-class MatchInfo {
-  matchId: any;
-  players: any[];
-}
+// MatchInfo: {
+//   tournamentId: string;
+//   gameRule: string;
+//   matches: [{
+//     player1Id: string;
+//     player2Id: string;
+//     player1TeamIndex: number;
+//     player2TeamIndex: number;
+//   }];
+// }
 
 @Injectable()
 export class MatchServiceProvider {
-  private matchInfo:MatchInfo = {
-    matchId: "",
-    players: []
-  };
-  constructor(public http: Http) {
-    console.log('Hello MatchServiceProvider Provider');
+  private matchInfo:{tournamentId, gameRule, matches:[{player1Id, player2Id, player1TeamIndex, player2TeamIndex}]};
+  constructor(public http: Http) {}
+
+  addAsPlayer(player) {
+
   }
 
-  addAsPlayer(player: any) {
-    this.matchInfo.players.push(player);
+  selectTeamForPlayer1(matchData: any) {
+    this.matchInfo.matches.push(matchData);
+  }
+
+  selectTeamForPlayer2(matchData: any) {
+    this.matchInfo.matches.push(matchData);
   }
 
   getMatchInfo() {
     return this.matchInfo;
   }
-
-  removePlayer(player:any) {
-    let currentPlayers = this.matchInfo.players;
-    let index = currentPlayers.indexOf(player);
-    console.log("删除的是第", index , "个");
-    this.matchInfo.players[index] = {};
-  }
-
 }

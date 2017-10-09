@@ -14,7 +14,7 @@ export class TeamSelectPage {
               public navParams: NavParams,
               private nbateamsservice: NBATeamsService) {
     this.teams = this.nbateamsservice.getNBATeams();
-    console.log(this.nbateamsservice.getNBATeams());
+    // console.log(this.nbateamsservice.getNBATeams());
   }
 
   selectTeam(team: NavParams) {
