@@ -17,7 +17,7 @@
                 比赛赛事
             </ion-label>
             <ion-select>
-                <ion-option *ngFor="let match of matches" value="{{match.name}}">{{match.name}}</ion-option>
+                <ion-option *ngFor="let tour of matches" value="{{tour.name}}">{{tour.name}}</ion-option>
             </ion-select>
         </ion-item>
 
@@ -43,28 +43,28 @@
         </ion-item>
     </ion-list> -->
 
-    <ion-card *ngFor="let match of matches" (click)="onSelectMatch(match)">
-        <img src="{{match.coverImg}}" style="width:100%" />
+    <ion-card *ngFor="let tour of tours" (click)="onSelectTour(tour)">
+        <img src="{{tour.coverImg}}" style="width:100%" />
         <ion-card-content>
             <ion-card-title>
-                {{match.name}}
-                <small text-right style="float:right; margin-top: 5px">{{match.time}}</small>
+                {{tour.name}}
+                <small text-right style="float:right; margin-top: 5px">{{tour.time}}</small>
             </ion-card-title>
             <p>
-                {{match.desc}}
+                {{tour.desc}}
             </p>
         </ion-card-content>
         <ion-row class="row" no-padding="">
             <ion-col class="col" text-left="">
                 <button clear="" color="danger" icon-start="" ion-button="" small="" class="disable-hover button button-ios button-clear button-clear-ios button-small button-small-ios button-clear-ios-danger"><span class="button-inner">
                   <ion-icon ios="ios-pin" md="md-pin"></ion-icon>
-                  {{match.location}}
+                  {{tour.location}}
               </span><div class="button-effect"></div></button>
             </ion-col>
             <ion-col class="col" text-right="">
                 <button clear="" color="danger" icon-start="" ion-button="" small="" class="disable-hover button button-ios button-clear button-clear-ios button-small button-small-ios button-clear-ios-danger"><span class="button-inner">
                   <ion-icon ios="ios-pulse" md="md-pulse"></ion-icon>
-                  {{match.status}}
+                  {{tour.status}}
               </span><div class="button-effect"></div></button>
             </ion-col>
         </ion-row>

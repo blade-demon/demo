@@ -1,34 +1,47 @@
 import { Component } from '@angular/core';
 import 'rxjs/add/operator/map';
-import { NavController, AlertController } from 'ionic-angular';
-import { NewMatchPage } from '../new-match/new-match';
+import { NavController, AlertController, LoadingController } from 'ionic-angular';
+import { MatchCreatePage } from '../match-create/match-create';
 import { Api } from "../../providers/api/api";
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  matches: { name, location, time }[] = [];
+  tours: { name, location, time }[] = [];
   public event = {
     month: '2017-10-01'
   }
   constructor(public navCtrl: NavController,
     private api: Api,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController) {
   }
 
   ionViewWillEnter() {
-    console.log("进入首页,获取赛事信息");
-    this.api.get('matches').subscribe(data => {
-      this.matches = data.json();
-    })
+    const loading = this.loadingCtrl.create({
+      content: '加载数据中...'
+    });
+    loading.present();
+    this.api.get('tournaments').subscribe(data => {
+      loading.dismiss();
+      this.tours = data.json();
+    }, (error) => {
+      loading.dismiss();
+      const alert = this.alertCtrl.create({
+        title: '错误',
+        subTitle: `获取数据失败, ${error}`,
+        buttons: ['确定']
+      });
+      alert.present();
+    });
   }
 
-  onSelectMatch(item) {
-    if (item.status === '进行中') {
-      this.navCtrl.push(NewMatchPage, { tournament: item });
+  onSelectTour(tour) {
+    if (tour.status === '进行中') {
+      this.navCtrl.push(MatchCreatePage, { tournament: tour });
     } else {
-      this.presentAlert(item.status);
+      this.presentAlert(tour.status);
     }
   }
 

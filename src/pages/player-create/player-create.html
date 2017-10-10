@@ -10,7 +10,7 @@
     </ion-searchbar>
 
     <ion-list>
-        <button ion-item *ngFor="let player of currentPlayers" (click)="choosePlayer(player)">
+        <button ion-item *ngFor="let player of currentPlayers; let i = index" (click)="choosePlayer(player, i)">
           <ion-avatar item-start>
             <img [src]="player.headimg" />
           </ion-avatar>

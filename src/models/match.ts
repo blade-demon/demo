@@ -1,8 +1,10 @@
 export class Match {
-  constructor(fields: any) {
-    // Quick and dirty extend/assign fields to this model
-    for (const f in fields) {
-      this[f] = fields[f];
-    }
-  }
+  tournamentId: string;
+  gameRule: string;
+  matches: [{
+    player1Id: string;
+    player2Id: string;
+    player1TeamIndex: number;
+    player2TeamIndex: number;
+  }];
 }

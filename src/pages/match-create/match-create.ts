@@ -1,22 +1,22 @@
-import { Component } from "@angular/core"
-import { NavController, ToastController, AlertController, ModalController, NavParams } from 'ionic-angular';
+import { Component, NgZone } from "@angular/core"
+import { Events, NavController, ToastController, AlertController, ModalController, NavParams } from 'ionic-angular';
 import { RecordResultPage } from '../record-result/record-result';
 import { PlayerCreatePage } from '../player-create/player-create';
 import { TeamSelectPage } from '../team-select/team-select';
 import { MatchServiceProvider } from '../../providers/match-service/match-service';
-
+import { Match} from '../../models/match';
 
 @Component({
-  selector: 'page-new-match',
-  templateUrl: 'new-match.html'
+  selector: 'page-match-create',
+  templateUrl: 'match-create.html'
 })
 
-export class NewMatchPage {
+export class MatchCreatePage {
+  match: Match;
   // 比赛规则
   gameRule: string;
   // 赛事信息
   tournament: any;
-  tournamentName: string;
   // 比赛信息
   matches: any[] = [];
   // 球员信息
@@ -26,12 +26,24 @@ export class NewMatchPage {
   teamsModal2: any;
 
   constructor(
+    public events: Events,
+    private zone: NgZone,
     public navCtrl: NavController,
     public navParams: NavParams,
     public matchService: MatchServiceProvider,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController) {
+
+    this.match = new Match();
+    console.log(this.match);
+
+    this.events.subscribe('updateScreen', () => {
+      this.zone.run(() => {
+        location.reload();
+      });
+    });
+
     // 默认BO1
     this.matches.push({ matchIndex: 1 });
     this.gameRule = "BO1";
@@ -43,18 +55,19 @@ export class NewMatchPage {
 
     this.teamsModal1.onDidDismiss(data => {
       console.log("Player1选择的Team是：" + JSON.stringify(data.selectedTeam));
-      this.matchService.selectTeamForPlayer1(data.selectedTeam);
+      // this.matchService.selectTeamForPlayer1(data.selectedTeam);
     });
 
     this.teamsModal2.onDidDismiss(data => {
       console.log("Player2选择的Team是：" + JSON.stringify(data.selectedTeam));
-      this.matchService.selectTeamForPlayer2(data.selectedTeam);
+      // this.matchService.selectTeamForPlayer2(data.selectedTeam);
     });
   }
 
   gameRuleChagne(data: string) {
     console.log("select change", data);
     let matchLength = Number(data.slice(2));
+    // this.match.matches = this.matches;
     this.matches = [];
     for (let i = 0; i < matchLength; i++) {
       this.matches.push({
@@ -63,30 +76,50 @@ export class NewMatchPage {
     }
   }
 
-  // 添加选手1
-  selectPlayer1() {
-    this.navCtrl.push(PlayerCreatePage);
-  }
-  // 添加选手2
-  selectPlayer2() {
-    this.navCtrl.push(PlayerCreatePage);
+  // 添加选手
+  selectPlayer(playerIndex) {
+    const modal = this.modalCtrl.create(PlayerCreatePage);
+    // modal.onDidDismiss((data)=> {
+    //   console.log("选手" + playerIndex + "是:" + data);
+    // });
+    modal.present();
   }
 
   // 选手1选择球队
-  selectTeamForPlayer1(match) {
+  selectTeamForPlayer1(match, matchIndex) {
     console.log(match);
     this.teamsModal1.present();
   }
 
   // 选手2选择球队
-  selectTeamForPlayer2(match) {
+  selectTeamForPlayer2(match, matchIndex) {
     console.log(match);
     this.teamsModal2.present();
   }
 
   // 添加新的比赛纪录
   addNewMatch() {
-    console.log("添加新的比赛纪录");
+    const alert = this.alertCtrl.create({
+      title: '提示',
+      subTitle: '你确定要放弃当前的比赛吗？',
+      buttons: [
+        {
+          text: '取消',
+          role: 'cancel',
+          handler: () => {
+            console.log('取消放弃');
+          }
+        },
+        {
+          text: '确定',
+          handler: () => {
+            console.log('放弃当前比赛');
+            this.events.publish('updateScreen');
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   getProfileImageStyle() {
@@ -104,7 +137,6 @@ export class NewMatchPage {
   ionViewWillEnter() {
     //获取赛事信息
     this.tournament = this.navParams.get("tournament");
-    this.tournamentName = this.tournament.name;
     // var data = this.matchService.getMatchInfo();
     // console.log("enter: ", data.players);
     // this.players = data.players;
@@ -146,5 +178,9 @@ export class NewMatchPage {
       duration: 3000
     });
     toast.present();
+  }
+
+  presentAlertAbortMatch() {
+
   }
 }

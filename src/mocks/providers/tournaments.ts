@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { Match } from '../../models/match';
+import { Tournament } from '../../models/tournament';
 
 @Injectable()
-export class Matches {
-  matches: Match[] = [];
+export class Tournaments {
+  tournaments: Tournament[] = [];
 
-  defaultItem: any = {
+  defaultTournament: any = {
     name: "NBA 2K18练习赛",
     coverImg: "http://wechatservice.gamepoch.com/images/DKVavutUIAAqfxE.jpg",
     location: "上海圣诺亚大酒店",
@@ -17,7 +17,7 @@ export class Matches {
   };
 
   constructor(public http: Http) {
-    let matches = [
+    let tours = [
       {
         name: "NBA 2K18练习赛",
         coverImg: "http://wechatservice.gamepoch.com/images/DKVavutUIAAqfxE.jpg",
@@ -56,17 +56,17 @@ export class Matches {
       }
     ];
 
-    for (let match of matches) {
-      this.matches.push(new Match(match));
+    for (let tour of tours) {
+      this.tournaments.push(tour);
     }
   }
 
   query(params?: any) {
     if (!params) {
-      return this.matches;
+      return this.tournaments;
     }
 
-    return this.matches.filter((item) => {
+    return this.tournaments.filter((item) => {
       for (let key in params) {
         let field = item[key];
         if (typeof field == 'string' && field.toLowerCase().indexOf(params[key].toLowerCase()) >= 0) {
@@ -79,11 +79,11 @@ export class Matches {
     });
   }
 
-  add(match: Match) {
-    this.matches.push(match);
+  add(tournament: Tournament) {
+    this.tournaments.push(tournament);
   }
 
-  delete(match: Match) {
-    this.matches.splice(this.matches.indexOf(match), 1);
+  delete(match: Tournament) {
+    this.tournaments.splice(this.tournaments.indexOf(match), 1);
   }
 }

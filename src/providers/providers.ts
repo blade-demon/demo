@@ -1,11 +1,13 @@
 import { Api } from './api/api';
-import { Players } from './players/players';
-import { Matches } from './matches/matches';
-import { Results} from './results/results';
+import { TournamentsProvider} from './tournaments/tournaments';
+import { PlayersProvider } from './players/players';
+import { MatchesProvider } from './matches/matches';
+import { ResultsProvider} from './results/results';
 
 export {
     Api,
-    Players,
-    Matches,
-    Results
+    PlayersProvider,
+    TournamentsProvider,
+    MatchesProvider,
+    ResultsProvider
 };

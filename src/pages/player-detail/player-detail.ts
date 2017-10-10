@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 // import { Player } from '../../models/player';
-import { NewMatchPage } from '../new-match/new-match';
+import { MatchCreatePage } from '../match-create/match-create';
 
 @Component({
   selector: 'page-player-detail',
@@ -23,6 +23,6 @@ export class PlayerDetailPage {
 
   onAddToMatch() {
     console.log("添加至比赛");
-    this.navCtrl.popTo(NewMatchPage);
+    this.navCtrl.popTo(MatchCreatePage);
   }
 }

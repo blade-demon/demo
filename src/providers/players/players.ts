@@ -7,7 +7,7 @@ import { Player } from '../../models/player';
 import { Api } from '../api/api';
 
 @Injectable()
-export class Players {
+export class PlayersProvider {
 
   constructor(public http: Http, public api: Api) {
   }

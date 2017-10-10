@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { ViewController, NavController, NavParams } from 'ionic-angular';
 
 import { Player } from '../../models/Player';
-import { Players } from '../../providers/providers';
+import { PlayersProvider } from '../../providers/providers';
 import { Api } from '../../providers/api/api';
 // import { PlayerDetailPage } from '../player-detail/player-detail';
 import { MatchServiceProvider } from '../../providers/match-service/match-service';
@@ -13,9 +13,10 @@ import { MatchServiceProvider } from '../../providers/match-service/match-servic
 })
 export class PlayerCreatePage {
   userInput: { id: string };
-  players: Players;
+  players: PlayersProvider;
   currentPlayers: Player[] = [];
   constructor(public navCtrl: NavController,
+    public viewCtrl: ViewController,
     public navParams: NavParams,
     private api: Api,
     private matchService : MatchServiceProvider) {}
@@ -74,12 +75,9 @@ export class PlayerCreatePage {
   }
 
   // 查看选手详细信息
-  choosePlayer(player) {
-    console.log("将选手1作为参赛者：",player);
-    // let playerSelected = new Player(player);
-    // console.log(playerSelected);
-    // this.navCtrl.push(PlayerDetailPage, {player: player});
-    this.matchService.addAsPlayer(player);
-    this.navCtrl.pop();
+  choosePlayer(player, index, matchIndex) {
+    console.log("将选手" + (index + 1) + "作为参赛者：",player);
+    this.matchService.addAsPlayer(player, index, matchIndex);
+    this.viewCtrl.dismiss();
   }
 }
