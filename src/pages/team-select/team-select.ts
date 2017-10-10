@@ -19,10 +19,10 @@ export class TeamSelectPage {
 
   selectTeam(team: NavParams) {
     this.selectedTeam = team;
-    this.viewCtrl.dismiss({selectedTeam: this.selectedTeam});
+    this.viewCtrl.dismiss(this.selectedTeam);
   }
 
   dismiss() {
-    this.viewCtrl.dismiss({selectedTeam: null});
+    this.viewCtrl.dismiss(null);
   }
 }

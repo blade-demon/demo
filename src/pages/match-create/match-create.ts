@@ -4,7 +4,7 @@ import { RecordResultPage } from '../record-result/record-result';
 import { PlayerCreatePage } from '../player-create/player-create';
 import { TeamSelectPage } from '../team-select/team-select';
 import { MatchServiceProvider } from '../../providers/match-service/match-service';
-import { Match} from '../../models/match';
+import { Match } from '../../models/match';
 
 @Component({
   selector: 'page-match-create',
@@ -12,18 +12,13 @@ import { Match} from '../../models/match';
 })
 
 export class MatchCreatePage {
-  match: Match;
-  // 比赛规则
-  gameRule: string;
-  // 赛事信息
   tournament: any;
-  // 比赛信息
-  matches: any[] = [];
-  // 球员信息
-  players: any[] = [];
-  // 球队模态框
-  teamsModal1: any;
-  teamsModal2: any;
+  team: any;
+  match: Match;
+  // matchCount: number;
+  gameRule: string;
+  players: any[];
+  resultDataTemplte: any;
 
   constructor(
     public events: Events,
@@ -35,66 +30,167 @@ export class MatchCreatePage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController) {
 
-    this.match = new Match();
-    console.log(this.match);
+    this.players = [];
+    this.resultDataTemplte = {
+      "player1": {
+        "playerId": "",
+        "teamId": "",
+        "score": 0,
+        "gotShots": 0,
+        "shotTimes": 0,
+        "gotThreePointsShots": 0,
+        "threePointsShots": 0,
+        "gotPenaltyShots": 0,
+        "penaltyShots": 0,
+        "fastBreakScore": 0,
+        "freeThrowLaneScore": 0,
+        "secondAttackScore": 0,
+        "substituteScore": 0,
+        "assists": 0,
+        "offensiveRebounds": 0,
+        "defensiveRebounds": 0,
+        "steals": 0,
+        "blockShots": 0,
+        "turnovers": 0,
+        "turnoverScores": 0,
+        "teamFouls": 0,
+        "maxLeadScore": 0,
+        "possessionTime": "0",
+        "remainingPauses": 0
+      }, "player2": {
+        "playerId": "",
+        "teamId": "",
+        "score": 0,
+        "gotShots": 0,
+        "shotTimes": 0,
+        "gotThreePointsShots": 0,
+        "threePointsShots": 0,
+        "gotPenaltyShots": 0,
+        "penaltyShots": 0,
+        "fastBreakScore": 0,
+        "freeThrowLaneScore": 0,
+        "secondAttackScore": 0,
+        "substituteScore": 0,
+        "assists": 0,
+        "offensiveRebounds": 0,
+        "defensiveRebounds": 0,
+        "steals": 0,
+        "blockShots": 0,
+        "turnovers": 0,
+        "turnoverScores": 0,
+        "teamFouls": 0,
+        "maxLeadScore": 0,
+        "possessionTime": "0",
+        "remainingPauses": 0
+      }
+    };
 
-    this.events.subscribe('updateScreen', () => {
-      this.zone.run(() => {
-        location.reload();
-      });
-    });
-
-    // 默认BO1
-    this.matches.push({ matchIndex: 1 });
-    this.gameRule = "BO1";
-    //
-    // 球队模态框初始化
-    this.teamsModal1 = this.modalCtrl.create(TeamSelectPage);
-    this.teamsModal2 = this.modalCtrl.create(TeamSelectPage);
-
-
-    this.teamsModal1.onDidDismiss(data => {
-      console.log("Player1选择的Team是：" + JSON.stringify(data.selectedTeam));
-      // this.matchService.selectTeamForPlayer1(data.selectedTeam);
-    });
-
-    this.teamsModal2.onDidDismiss(data => {
-      console.log("Player2选择的Team是：" + JSON.stringify(data.selectedTeam));
-      // this.matchService.selectTeamForPlayer2(data.selectedTeam);
-    });
+    this.match = {
+      "tournamentId": "",
+      "gameRule": "BO1",
+      "playersId": ["", ""],
+      "date": "",
+      "results": [{
+        "player1": {
+          "playerId": "",
+          "teamId": "",
+          "score": 0,
+          "gotShots": 0,
+          "shotTimes": 0,
+          "gotThreePointsShots": 0,
+          "threePointsShots": 0,
+          "gotPenaltyShots": 0,
+          "penaltyShots": 0,
+          "fastBreakScore": 0,
+          "freeThrowLaneScore": 0,
+          "secondAttackScore": 0,
+          "substituteScore": 0,
+          "assists": 0,
+          "offensiveRebounds": 0,
+          "defensiveRebounds": 0,
+          "steals": 0,
+          "blockShots": 0,
+          "turnovers": 0,
+          "turnoverScores": 0,
+          "teamFouls": 0,
+          "maxLeadScore": 0,
+          "possessionTime": "0",
+          "remainingPauses": 0
+        }, "player2": {
+          "playerId": "",
+          "teamId": "",
+          "score": 0,
+          "gotShots": 0,
+          "shotTimes": 0,
+          "gotThreePointsShots": 0,
+          "threePointsShots": 0,
+          "gotPenaltyShots": 0,
+          "penaltyShots": 0,
+          "fastBreakScore": 0,
+          "freeThrowLaneScore": 0,
+          "secondAttackScore": 0,
+          "substituteScore": 0,
+          "assists": 0,
+          "offensiveRebounds": 0,
+          "defensiveRebounds": 0,
+          "steals": 0,
+          "blockShots": 0,
+          "turnovers": 0,
+          "turnoverScores": 0,
+          "teamFouls": 0,
+          "maxLeadScore": 0,
+          "possessionTime": "0",
+          "remainingPauses": 0
+        }
+      }]
+    }
   }
 
-  gameRuleChagne(data: string) {
-    console.log("select change", data);
+  gameRuleChange(data: string) {
     let matchLength = Number(data.slice(2));
-    // this.match.matches = this.matches;
-    this.matches = [];
-    for (let i = 0; i < matchLength; i++) {
-      this.matches.push({
-        index: i + 1
-      });
-    }
+    // this.matchCount = matchLength;
+    // this.match.results.push(this.resultDataTemplte);
+    // console.log(this.matchCount);
   }
 
   // 添加选手
   selectPlayer(playerIndex) {
     const modal = this.modalCtrl.create(PlayerCreatePage);
-    // modal.onDidDismiss((data)=> {
-    //   console.log("选手" + playerIndex + "是:" + data);
-    // });
+    modal.onDidDismiss((player) => {
+      if (player) {
+        // console.log(`选手${playerIndex}是: ${player.name}`);
+        this.match.playersId[playerIndex - 1] = player.gamepochPlayerId;
+        this.players[playerIndex - 1] = player;
+        console.log(this.match);
+      } else {
+        // console.log(`选手${playerIndex}为空`);
+      }
+    });
     modal.present();
   }
 
-  // 选手1选择球队
-  selectTeamForPlayer1(match, matchIndex) {
-    console.log(match);
-    this.teamsModal1.present();
-  }
-
-  // 选手2选择球队
-  selectTeamForPlayer2(match, matchIndex) {
-    console.log(match);
-    this.teamsModal2.present();
+  // 选择球队
+  selectTeam(playerIndex, matchIndex) {
+    const modal = this.modalCtrl.create(TeamSelectPage);
+    modal.onDidDismiss((team) => {
+      if (team) {
+        console.log(`在第${matchIndex + 1}局比赛中，选手${playerIndex}选择的球队是，${team.name}`);
+        if (!playerIndex) {
+          // 第matchIndex+1场比赛的选手1的选手Id
+          this.match.results[matchIndex].player1.playerId = this.match.playersId[playerIndex];
+          // 第matchIndex+1场比赛的选手1的选手的队伍
+          this.match.results[matchIndex].player1.teamId = team.index;
+        } else {
+          // 第matchIndex+1场比赛的选手2的选手Id
+          this.match.results[matchIndex].player2.playerId = this.match.playersId[playerIndex];
+          // 第matchIndex+1场比赛的选手2的选手的队伍
+          this.match.results[matchIndex].player2.teamId = team.index;
+        }
+      } else {
+        console.log(`在第${matchIndex + 1}局比赛中，选手${playerIndex}选择的球队为空`);
+      }
+    })
+    modal.present();
   }
 
   // 添加新的比赛纪录
@@ -140,7 +236,7 @@ export class MatchCreatePage {
     // var data = this.matchService.getMatchInfo();
     // console.log("enter: ", data.players);
     // this.players = data.players;
-    console.log(this.players);
+    // console.log(this.players);
   }
 
   // 记录比赛详细数据

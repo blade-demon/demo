@@ -20,7 +20,7 @@ export class PlayersPreparePage {
   player1Info: PlayerPrepareInfo = {
     playername: '张三',
     playerId: "1234",
-    playerimage: "../../assets/img/avatar_placeholder.jpg",
+    playerimage: "../../assets/img/doubt.jpg",
     team: '尚未选择球队',
     image: "../../assets/img/team_placeholder.jpg",
     teamIndex: -1
@@ -29,7 +29,7 @@ export class PlayersPreparePage {
   player2Info: PlayerPrepareInfo = {
     playername: '李四',
     playerId: "5664",
-    playerimage: "../../assets/img/avatar_placeholder.jpg",
+    playerimage: "../../assets/img/doubt.jpg",
     team: '尚未选择球队',
     image: "../../assets/img/team_placeholder.jpg",
     teamIndex: -1

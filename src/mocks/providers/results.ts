@@ -7,7 +7,6 @@ export class Results {
   results: Result[] = [];
 
   defaultResult: any = {
-    "matchId": "657100911879",
     "playerId":"1062619387",
     "score": 86,
     "gotShots": 13,
@@ -35,7 +34,6 @@ export class Results {
 
   constructor(public http: Http) {
     let results = [{
-      "matchId": "657100911879",
       "playerId":"1062619387",
       "score": 86,
       "gotShots": 13,
@@ -60,7 +58,7 @@ export class Results {
       "possessionTime": "4:54",
       "remainingPauses": 2
     }, {
-      "matchId": "657100911879",
+      // "matchId": "657100911879",
       "playerId":"1062619387",
       "score": 86,
       "gotShots": 13,

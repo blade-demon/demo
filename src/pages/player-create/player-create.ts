@@ -5,7 +5,6 @@ import { Player } from '../../models/Player';
 import { PlayersProvider } from '../../providers/providers';
 import { Api } from '../../providers/api/api';
 // import { PlayerDetailPage } from '../player-detail/player-detail';
-import { MatchServiceProvider } from '../../providers/match-service/match-service';
 
 @Component({
   selector: 'page-player-create',
@@ -18,8 +17,7 @@ export class PlayerCreatePage {
   constructor(public navCtrl: NavController,
     public viewCtrl: ViewController,
     public navParams: NavParams,
-    private api: Api,
-    private matchService : MatchServiceProvider) {}
+    private api: Api) {}
 
   ionViewDidLoad() {
     // console.log('ionViewDidLoad PlayerCreatePage');
@@ -77,7 +75,6 @@ export class PlayerCreatePage {
   // 查看选手详细信息
   choosePlayer(player, index, matchIndex) {
     console.log("将选手" + (index + 1) + "作为参赛者：",player);
-    this.matchService.addAsPlayer(player, index, matchIndex);
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss(player);
   }
 }
