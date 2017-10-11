@@ -5,11 +5,13 @@ export class Match {
   "date": string;
   "results": [{
     "player1": {
+      "matchId": string,
       "playerId": string,
       "teamId":string,
+      "matchIndex": number,
       "score": number,
       "gotShots": number,
-      "shotTimes": number,
+      "shots": number,
       "gotThreePointsShots": number,
       "threePointsShots": number,
       "gotPenaltyShots": number,
@@ -28,13 +30,16 @@ export class Match {
       "teamFouls": number,
       "maxLeadScore": number,
       "possessionTime": string,
-      "remainingPauses": number
+      "remainingPauses": number,
+      "win": Boolean
     }, "player2": {
+      "matchId": string,
       "playerId": string,
       "teamId":string,
+      "matchIndex": number,
       "score": number,
       "gotShots": number,
-      "shotTimes": number,
+      "shots": number,
       "gotThreePointsShots": number,
       "threePointsShots": number,
       "gotPenaltyShots": number,
@@ -53,7 +58,8 @@ export class Match {
       "teamFouls": number,
       "maxLeadScore": number,
       "possessionTime": string,
-      "remainingPauses": number
+      "remainingPauses": number,
+      "win": Boolean
     }
   }];
 }

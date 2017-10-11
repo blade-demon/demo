@@ -47,7 +47,7 @@ export class PlayersPreparePage {
       // console.log("Player1选择的Team是：" + JSON.stringify(data.selectedTeam));
       this.player1Info.team = data.selectedTeam.name;
       this.player1Info.image = data.selectedTeam.image,
-      this.player1Info.teamIndex = data.selectedTeam.index
+        this.player1Info.teamIndex = data.selectedTeam.index
     });
 
     this.teamsModalFor2.onDidDismiss(data => {

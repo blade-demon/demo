@@ -7,7 +7,7 @@ import { NBATeamsService } from '../../providers/nbateams.service';
 })
 
 export class TeamSelectPage {
-  teams: {name, image}[] = [];
+  teams: {index, name, image}[] = [];
   selectedTeam: any;
   constructor(public navCtrl: NavController,
               public viewCtrl: ViewController,

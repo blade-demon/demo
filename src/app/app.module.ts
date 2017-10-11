@@ -27,6 +27,8 @@ import { Api } from '../providers/providers';
 import { NBATeamsService } from '../providers/nbateams.service';
 import { MatchServiceProvider } from '../providers/match-service/match-service';
 import { TournamentsProvider } from '../providers/tournaments/tournaments';
+import { StorageServiceProvider } from '../providers/storage-service/storage-service';
+import { IonicStorageModule } from '@ionic/storage';
 
 
 @NgModule({
@@ -47,6 +49,7 @@ import { TournamentsProvider } from '../providers/tournaments/tournaments';
   imports: [
     BrowserModule,
     HttpModule,
+    IonicStorageModule.forRoot(),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -75,7 +78,8 @@ import { TournamentsProvider } from '../providers/tournaments/tournaments';
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    NBATeamsService
+    NBATeamsService,
+    StorageServiceProvider
   ]
 })
 export class AppModule { }
