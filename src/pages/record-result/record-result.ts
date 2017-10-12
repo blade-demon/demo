@@ -25,14 +25,13 @@ export class RecordResultPage {
     public nbateamservice: NBATeamsService,
     public alertCtrl: AlertController,
     public matchService: MatchServiceProvider,
-    public api: Api,
-    private storage: Storage) {
+    public api: Api) {
 
     this.teams = this.nbateamservice.getNBATeams();
     this.matchInfo = this.navParams.get("match");
     this.resultIndex = this.navParams.get("index");
-    this.gameRule = this.navParams.get('gameRule');
-    this.matchId = this.navParams.get("matchId");
+    this.gameRule = this.matchInfo.gameRule;
+    this.matchId = this.matchInfo.results[0].player1.matchId;
 
     this.currentTeams = [];
     this.currentTeams[0] = this.teams[this.matchInfo.results[this.resultIndex].player1.teamId];
@@ -42,30 +41,28 @@ export class RecordResultPage {
     this.currentResults[0] = this.matchInfo.results[this.resultIndex].player1;
     this.currentResults[1] = this.matchInfo.results[this.resultIndex].player2;
 
-    // console.log(this.matchInfo);
-    // console.log(this.teams);
+    console.log(this.matchInfo);
   }
 
-  ionViewWillEnter() {
-    // console.log(this.currentResults[0]);
-    // console.log(this.currentResults[1]);
-    // console.log(this.currentTeams);
-  }
+  ionViewWillEnter() {}
 
   // 提交比赛结果
   doSubmitResult() {
-    console.log("本场比赛的结果是", this.currentResults);
-    const loading = this.loadCtrl.create({
-      content: '提交数据中...'
-    });
+    // console.log("本场比赛的结果是", this.currentResults);
+    // 确定本场比赛输赢
+    if( Number(this.currentResults[0].score) > Number(this.currentResults[1].score)) {
+      this.currentResults[0].win = true;
+    } else {
+      this.currentResults[1].win = true;
+    }
+    // 上传输据
+    const loading = this.loadCtrl.create({ content: '提交数据中...' });
     loading.present();
     this.api.post('results/insertMany', this.currentResults).subscribe(data => {
       loading.dismiss();
-      this.matchService.setMatchInfo(data);
+      // 传递服务器返回的比赛存储数据
+      this.matchService.setMatchInfo(data.json());
       this.navCtrl.pop();
-      // console.log(data);
-      // console.log("本场比赛的matchId", this.matchId);
-      // console.log("本场比赛的gameRule", this.match.gameRule);
     }, (error) => {
       loading.dismiss();
       const alert = this.alertCtrl.create({

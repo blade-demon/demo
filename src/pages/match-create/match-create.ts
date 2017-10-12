@@ -24,6 +24,7 @@ export class MatchCreatePage {
   resultDataTemplte: any;
 
   matchId: string;
+  matchFinalResult: string;
 
   constructor(
     public navCtrl: NavController,
@@ -40,9 +41,10 @@ export class MatchCreatePage {
     this.players = [];
     this.resultDataTemplte = {
       "player1": {
-        "matchId": "",
         "playerId": "",
+        "matchId": "",
         "teamId": "",
+        "matchIndex": -1,
         "score": 0,
         "gotShots": 0,
         "shots": 0,
@@ -70,6 +72,7 @@ export class MatchCreatePage {
         "matchId": "",
         "playerId": "",
         "teamId": "",
+        "matchIndex": -1,
         "score": 0,
         "gotShots": 0,
         "shots": 0,
@@ -101,65 +104,7 @@ export class MatchCreatePage {
       "gameRule": "BO1",
       "playersId": ["", ""],
       "date": "",
-      "results": [{
-        "player1": {
-          "playerId": "",
-          "matchId": "",
-          "teamId": "",
-          "matchIndex": 0,
-          "score": 0,
-          "gotShots": 0,
-          "shots": 0,
-          "gotThreePointsShots": 0,
-          "threePointsShots": 0,
-          "gotPenaltyShots": 0,
-          "penaltyShots": 0,
-          "fastBreakScore": 0,
-          "freeThrowLaneScore": 0,
-          "secondAttackScore": 0,
-          "substituteScore": 0,
-          "assists": 0,
-          "offensiveRebounds": 0,
-          "defensiveRebounds": 0,
-          "steals": 0,
-          "blockShots": 0,
-          "turnovers": 0,
-          "turnoverScores": 0,
-          "teamFouls": 0,
-          "maxLeadScore": 0,
-          "possessionTime": "0",
-          "remainingPauses": 0,
-          "win": false
-        }, "player2": {
-          "matchId": "",
-          "playerId": "",
-          "teamId": "",
-          "matchIndex": 0,
-          "score": 0,
-          "gotShots": 0,
-          "shots": 0,
-          "gotThreePointsShots": 0,
-          "threePointsShots": 0,
-          "gotPenaltyShots": 0,
-          "penaltyShots": 0,
-          "fastBreakScore": 0,
-          "freeThrowLaneScore": 0,
-          "secondAttackScore": 0,
-          "substituteScore": 0,
-          "assists": 0,
-          "offensiveRebounds": 0,
-          "defensiveRebounds": 0,
-          "steals": 0,
-          "blockShots": 0,
-          "turnovers": 0,
-          "turnoverScores": 0,
-          "teamFouls": 0,
-          "maxLeadScore": 0,
-          "possessionTime": "0",
-          "remainingPauses": 0,
-          "win": false
-        }
-      }]
+      "results": [this.resultDataTemplte]
     }
   }
 
@@ -209,7 +154,7 @@ export class MatchCreatePage {
     if (this.matchId) {
       let confirm = this.alertCtrl.create({
         title: '注意',
-        message: '确定要放弃当前比赛记录吗？',
+        message: '确定要新建比赛记录吗？',
         buttons: [
           {
             text: '取消',
@@ -220,7 +165,10 @@ export class MatchCreatePage {
           {
             text: '确定',
             handler: () => {
-              console.log('Agree clicked');
+              // 初始化服务
+              this.matchService.initialMatchInfo();
+              // 初始化数据
+              this.initialData();
               const alert = this.alertCtrl.create();
               alert.setTitle('选择赛制');
 
@@ -340,17 +288,30 @@ export class MatchCreatePage {
   }
 
   ionViewWillEnter() {
-    //获取赛事信息
-    this.tournament = this.navParams.get("tournament");
     this.matchService.getMatchInfo().then(data => {
-      this.matchId = data;
-      console.log(this.matchId);
-      this.api.get('results', { matchId: this.matchId }).subscribe((data) => {
-        console.log(data);
-        var results = data;
-      }, (error) => {
-        console.log(error);
-      })
+      if(data) {
+        // 已存在缓存比赛结果
+        console.log("已缓存的比赛数据：" + data);
+        this.matchId = data[0].matchId;
+        let matchCount = this.getMatchCount();
+        let currentMatchCount = data.length/2;
+        console.log("matchCount", matchCount);
+        console.log("currentMatchCount", currentMatchCount);
+        if(matchCount >= currentMatchCount) {
+          console.log("已记录比赛记录", this.match.results);
+          this.addNewResult( this.match.results);
+          console.log("待更新比赛记录", this.match.results);
+        }
+        this.matchService.getTournament().then(data => {
+          this.tournament = JSON.parse(data);
+        });
+        console.log(this.tournament);
+      } else {
+        // 新比赛
+        this.tournament = this.navParams.get("tournament");
+        console.log(this.tournament);
+        this.matchService.setTournament(JSON.stringify(this.tournament));
+      }
     }, (error) => {
       console.log(error);
     });
@@ -361,6 +322,168 @@ export class MatchCreatePage {
     console.log("详细记录比赛数据");
     this.match.results[index].player1.matchId = this.matchId;
     this.match.results[index].player2.matchId = this.matchId;
-    this.navCtrl.push(RecordResultPage, { index: index, match: this.match, gameRule: this.match.gameRule });
+    this.match.results[index].player1.matchIndex = index;
+    this.match.results[index].player2.matchIndex = index;
+    this.navCtrl.push(RecordResultPage, { index: index, match: this.match });
   }
+
+  getMatchCount() {
+    console.log(this.match.gameRule);
+    return Number(this.match.gameRule.slice(2));
+  }
+
+  // 确定是否添加比赛
+  addNewResult(data){
+    let gameCount = this.getMatchCount();
+    let p1WinCount = 0;
+    let p2WinCount = 0;
+    for(let i = 0; i < data.length; i++) {
+      if(data[i].player1.win) {
+        p1WinCount++;
+      } else {
+        p2WinCount++;
+      }
+    }
+    let winCount = Math.floor(gameCount/2) + 1;
+    console.log("选手1赢得比赛次数：", p1WinCount);
+    console.log("选手2赢得比赛次数：", p2WinCount);
+    console.log("需要赢得的比赛次数为：", winCount);
+    if(p1WinCount < winCount && p2WinCount < winCount) {
+      this.match.results.push({
+        "player1": {
+          "playerId": "",
+          "matchId": "",
+          "teamId": "",
+          "matchIndex": -1,
+          "score": 0,
+          "gotShots": 0,
+          "shots": 0,
+          "gotThreePointsShots": 0,
+          "threePointsShots": 0,
+          "gotPenaltyShots": 0,
+          "penaltyShots": 0,
+          "fastBreakScore": 0,
+          "freeThrowLaneScore": 0,
+          "secondAttackScore": 0,
+          "substituteScore": 0,
+          "assists": 0,
+          "offensiveRebounds": 0,
+          "defensiveRebounds": 0,
+          "steals": 0,
+          "blockShots": 0,
+          "turnovers": 0,
+          "turnoverScores": 0,
+          "teamFouls": 0,
+          "maxLeadScore": 0,
+          "possessionTime": "0",
+          "remainingPauses": 0,
+          "win": false
+        }, "player2": {
+          "matchId": "",
+          "playerId": "",
+          "teamId": "",
+          "matchIndex": -1,
+          "score": 0,
+          "gotShots": 0,
+          "shots": 0,
+          "gotThreePointsShots": 0,
+          "threePointsShots": 0,
+          "gotPenaltyShots": 0,
+          "penaltyShots": 0,
+          "fastBreakScore": 0,
+          "freeThrowLaneScore": 0,
+          "secondAttackScore": 0,
+          "substituteScore": 0,
+          "assists": 0,
+          "offensiveRebounds": 0,
+          "defensiveRebounds": 0,
+          "steals": 0,
+          "blockShots": 0,
+          "turnovers": 0,
+          "turnoverScores": 0,
+          "teamFouls": 0,
+          "maxLeadScore": 0,
+          "possessionTime": "0",
+          "remainingPauses": 0,
+          "win": false
+        }
+      });
+    } else {
+      this.matchFinalResult = p1WinCount > p2WinCount ? `选手1获胜` : `选手2获胜`;
+    }
+  }
+
+  // 初始化数据
+  initialData() {
+    this.players = [];
+    this.resultDataTemplte = {
+      "player1": {
+        "playerId": "",
+        "matchId": "",
+        "teamId": "",
+        "matchIndex": -1,
+        "score": 0,
+        "gotShots": 0,
+        "shots": 0,
+        "gotThreePointsShots": 0,
+        "threePointsShots": 0,
+        "gotPenaltyShots": 0,
+        "penaltyShots": 0,
+        "fastBreakScore": 0,
+        "freeThrowLaneScore": 0,
+        "secondAttackScore": 0,
+        "substituteScore": 0,
+        "assists": 0,
+        "offensiveRebounds": 0,
+        "defensiveRebounds": 0,
+        "steals": 0,
+        "blockShots": 0,
+        "turnovers": 0,
+        "turnoverScores": 0,
+        "teamFouls": 0,
+        "maxLeadScore": 0,
+        "possessionTime": "0",
+        "remainingPauses": 0,
+        "win": false
+      }, "player2": {
+        "matchId": "",
+        "playerId": "",
+        "teamId": "",
+        "matchIndex": -1,
+        "score": 0,
+        "gotShots": 0,
+        "shots": 0,
+        "gotThreePointsShots": 0,
+        "threePointsShots": 0,
+        "gotPenaltyShots": 0,
+        "penaltyShots": 0,
+        "fastBreakScore": 0,
+        "freeThrowLaneScore": 0,
+        "secondAttackScore": 0,
+        "substituteScore": 0,
+        "assists": 0,
+        "offensiveRebounds": 0,
+        "defensiveRebounds": 0,
+        "steals": 0,
+        "blockShots": 0,
+        "turnovers": 0,
+        "turnoverScores": 0,
+        "teamFouls": 0,
+        "maxLeadScore": 0,
+        "possessionTime": "0",
+        "remainingPauses": 0,
+        "win": false
+      }
+    };
+
+    this.match = {
+      "tournamentId": "",
+      "gameRule": "BO1",
+      "playersId": ["", ""],
+      "date": "",
+      "results": [this.resultDataTemplte]
+    }
+    this.matchFinalResult = "";
+  }
+
 }

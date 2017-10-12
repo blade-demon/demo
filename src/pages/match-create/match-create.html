@@ -59,9 +59,13 @@
             </div>
           </ion-col>
           <ion-col col-4>
-            <button ion-button icon-only [disabled]="!match.results[i].player1.teamId || !match.results[i].player2.teamId" (click)="onRecordResult(i)">
+            <button ion-button icon-only *ngIf="match.results[i].player1.matchIndex == -1" [disabled]="!match.results[i].player1.teamId || !match.results[i].player2.teamId" (click)="onRecordResult(i)">
               <ion-icon ios="ios-create" md="md-create"></ion-icon>
             </button>
+            <p *ngIf="match.results[i].player1.matchIndex != -1">
+              {{ match.results[i].player1.score }} : {{ match.results[i].player2.score }}
+            </p>
+            <p *ngIf="match.results[i].player1.matchIndex != -1">比赛已记录</p>
           </ion-col>
           <ion-col col-4>
             <div (click)="selectTeam(1, i)">
@@ -73,6 +77,9 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+    </ion-item>
+    <ion-item *ngIf="matchFinalResult">
+      <p style="text-align:center">{{ matchFinalResult }}</p>
     </ion-item>
     <!-- 显示比赛结果 -->
   </ion-list>
