@@ -19,186 +19,170 @@
         <p *ngIf="currentTeams[0]">{{currentTeams[0].name}}</p>
       </ion-list-header>
       <ion-item>
-        <ion-label floating>得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].score" name="player1-score"></ion-input>
+        <ion-label item-start>得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].score" dir="rtl" name="player1-score"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>出手数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].shots" name="player1-shots"></ion-input>
+        <ion-label item-start>命中</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].gotShots" name="player1-gotShots" required></ion-input>
+
+        <ion-input type="number" [(ngModel)]="currentResults[0].shots" name="player1-shots" required></ion-input>
+        <ion-label item-end>命中率</ion-label>
       </ion-item>
       <ion-item>
-        <ion-label floating>投中数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].gotShots" name="player1-gotShots"></ion-input>
+        <ion-label item-start>三分球</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].gotThreePointsShots" name="player1-gotThreePointsShots" required></ion-input>
+        <ion-label> / </ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].threePointsShots" name="player1-threePointsShots" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>三分出手数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].threePointsShots" name="player1-threePointsShots"></ion-input>
+        <ion-label item-start>罚球</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].gotPenaltyShots" name="player1-gotPenaltyShots" required></ion-input>
+        <ion-input type="number" [(ngModel)]="currentResults[0].penaltyShots" name="player1-penaltyShots" required></ion-input>
+        <ion-label item-end> 10 </ion-label>
       </ion-item>
       <ion-item>
-        <ion-label floating>三分命中数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].gotThreePointsShots" name="player1-gotThreePointsShots"></ion-input>
+        <ion-label item-start>快攻得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].fastBreakScore" name="player1-fastBreakScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>罚球数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].penaltyShots" name="player1-penaltyShots"></ion-input>
+        <ion-label item-start>禁区得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].freeThrowLaneScore" name="player1-freeThrowLaneScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>罚球命中数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].gotPenaltyShots" name="player1-gotPenaltyShots"></ion-input>
+        <ion-label item-start>二次进攻得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].secondAttackScore" name="player1-secondAttackScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>快攻得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].fastBreakScore" name="player1-fastBreakScore"></ion-input>
+        <ion-label item-start>替补球员得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].substituteScore" name="player1-substituteScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>禁区得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].freeThrowLaneScore" name="player1-freeThrowLaneScore"></ion-input>
+        <ion-label item-start>助攻</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].assists" name="player1-assists" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>二次进攻得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].secondAttackScore" name="player1-secondAttackScore"></ion-input>
+        <ion-label item-start>进攻篮板</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].offensiveRebounds" name="player1-offensiveRebounds" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>替补球员得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].substituteScore" name="player1-substituteScore"></ion-input>
+        <ion-label item-start>防守篮板</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].defensiveRebounds" name="player1-defensiveRebounds" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>助攻</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].assists" name="player1-assists"></ion-input>
+        <ion-label item-start>抢断</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].steals" name="player1-steals" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>进攻篮板</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].offensiveRebounds" name="player1-offensiveRebounds"></ion-input>
+        <ion-label item-start>盖帽</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].blockShots" name="player1-blockShots" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>防守篮板</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].defensiveRebounds" name="player1-defensiveRebounds"></ion-input>
+        <ion-label item-start>失误（得分）</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].turnovers" name="player1-turnovers" required></ion-input>
+        <ion-label>（</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].turnoverScores" name="player1-turnoverScores" required></ion-input>
+        <ion-label>）</ion-label>
       </ion-item>
       <ion-item>
-        <ion-label floating>抢断</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].steals" name="player1-steals"></ion-input>
+        <ion-label item-start>球队犯规</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].teamFouls" name="player1-teamFouls" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>盖帽</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].blockShots" name="player1-blockShots"></ion-input>
+        <ion-label item-start>最大领先</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].maxLeadScore" name="player1-maxLeadScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>失误</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].turnovers" name="player1-turnovers"></ion-input>
+        <ion-label item-start>控球时间</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].possessionTime" name="player1-possessionTime" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>利用失误得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].turnoverScores" name="player1-turnoverScores"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>犯规</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].teamFouls" name="player1-teamFouls"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>最大领先</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].maxLeadScore" name="player1-maxLeadScore"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>控球时间</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].possessionTime" name="player1-possessionTime"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>剩余暂停数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[0].remainingPauses" name="player1-remainingPauses"></ion-input>
+        <ion-label item-start>剩余暂停数</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[0].remainingPauses" name="player1-remainingPauses" required></ion-input>
       </ion-item>
       <!-- Player2 数据统计-->
       <ion-list-header color="primary">
         <p *ngIf="currentTeams[1]">{{currentTeams[1].name}}</p>
       </ion-list-header>
       <ion-item>
-        <ion-label floating>得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].score" name="player2-score"></ion-input>
+        <ion-label item-start>得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].score" name="player2-score" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>出手数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].shots" name="player2-shots"></ion-input>
+        <ion-label item-start>命中</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].gotShots" name="player2-gotShots" required></ion-input>
+        <ion-input type="number" [(ngModel)]="currentResults[1].shots" name="player2-shots" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>投中数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].gotShots" name="player2-gotShots"></ion-input>
+        <ion-label item-start>三分球</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].gotThreePointsShots" name="player2-gotThreePointsShots" required></ion-input>
+        <ion-input type="number" [(ngModel)]="currentResults[1].threePointsShots" name="player2-threePointsShots" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>三分出手数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].threePointsShots" name="player2-threePointsShots"></ion-input>
+        <ion-label item-start>罚球</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].penaltyShots" name="player2-penaltyShots" required></ion-input>
+        <ion-input type="number" [(ngModel)]="currentResults[1].gotPenaltyShots" name="player2-gotPenaltyShots" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>三分命中数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].gotThreePointsShots" name="player2-gotThreePointsShots"></ion-input>
+        <ion-label item-start>快攻得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].fastBreakScore" name="player2-fastBreakScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>罚球数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].penaltyShots" name="player2-penaltyShots"></ion-input>
+        <ion-label item-start>禁区得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].freeThrowLaneScore" name="player2-freeThrowLaneScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>罚球命中数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].gotPenaltyShots" name="player2-gotPenaltyShots"></ion-input>
+        <ion-label item-start>二次进攻得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].secondAttackScore" name="player2-secondAttackScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>快攻得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].fastBreakScore" name="player2-fastBreakScore"></ion-input>
+        <ion-label item-start>替补球员得分</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].substituteScore" name="player1-substituteScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>禁区得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].freeThrowLaneScore" name="player2-freeThrowLaneScore"></ion-input>
+        <ion-label item-start>助攻</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].assists" name="player2-assists" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>二次进攻得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].secondAttackScore" name="player2-secondAttackScore"></ion-input>
+        <ion-label item-start>进攻篮板</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].offensiveRebounds" name="player2-offensiveRebounds" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>替补球员得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].substituteScore" name="player1-substituteScore"></ion-input>
+        <ion-label item-start>防守篮板</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].defensiveRebounds" name="player2-defensiveRebounds" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>助攻</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].assists" name="player2-assists"></ion-input>
+        <ion-label item-start>抢断</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].steals" name="player2-steals" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>进攻篮板</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].offensiveRebounds" name="player2-offensiveRebounds"></ion-input>
+        <ion-label item-start>盖帽</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].blockShots" name="player2-blockShots" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>防守篮板</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].defensiveRebounds" name="player2-defensiveRebounds"></ion-input>
+        <ion-label item-start>失误（得分）</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].turnovers" name="player2-turnovers" required></ion-input>
+        <ion-input type="number" [(ngModel)]="currentResults[1].turnoverScores" name="player2-turnoverScores" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>抢断</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].steals" name="player2-steals"></ion-input>
+        <ion-label item-start>球队犯规</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].teamFouls" name="player2-teamFouls" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>盖帽</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].blockShots" name="player2-blockShots"></ion-input>
+        <ion-label item-start>最大领先</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].maxLeadScore" name="player2-maxLeadScore" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>失误</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].turnovers" name="player2-turnovers"></ion-input>
+        <ion-label item-start>控球时间</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].possessionTime" name="player2-possessionTime" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>利用失误得分</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].turnoverScores" name="player2-turnoverScores"></ion-input>
+        <ion-label item-start>剩余暂停数</ion-label>
+        <ion-input type="number" [(ngModel)]="currentResults[1].remainingPauses" name="player2-remainingPauses" required></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label floating>犯规</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].teamFouls" name="player2-teamFouls"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>最大领先</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].maxLeadScore" name="player2-maxLeadScore"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>控球时间</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].possessionTime" name="player2-possessionTime"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>剩余暂停数</ion-label>
-        <ion-input type="number" [(ngModel)]="currentResults[1].remainingPauses" name="player2-remainingPauses"></ion-input>
-      </ion-item>
-      <button padding ion-button icon-right block type="submit">提交数据<ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon></button>
+      <button padding ion-button icon-right block type="submit">提交数据
+        <ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon>
+      </button>
     </form>
   </ion-list>
 </ion-content>

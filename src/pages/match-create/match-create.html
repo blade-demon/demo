@@ -3,8 +3,8 @@
     <ion-title *ngIf="tournament">{{tournament.name}}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="addNewMatch()">
-            <ion-icon name="add"></ion-icon>
-          </button>
+        <ion-icon name="add"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -52,27 +52,28 @@
         <ion-row style="text-align:center; align-items: center">
           <ion-col col-4>
             <div (click)="selectTeam(0, i)">
-              <img *ngIf="match.results[i].player1.teamId" src="{{teams[match.results[i].player1.teamId].image}}" style="width:64px">
+              <img *ngIf="match.results[i].player1.teamId" src="{{teams[match.results[i].player1.teamId - 1].image}}" style="width:64px">
               <img *ngIf="!match.results[i].player1.teamId" src="assets/img/nba2k18.jpg" alt="球队图标" style="width: 64px">
-              <p *ngIf="result.player1.teamId">{{teams[match.results[i].player1.teamId].name}}</p>
+              <p *ngIf="result.player1.teamId">{{teams[match.results[i].player1.teamId - 1].name}}</p>
               <p *ngIf="!result.player1.teamId">未知球队</p>
             </div>
           </ion-col>
           <ion-col col-4>
-            <button ion-button icon-only *ngIf="match.results[i].player1.matchIndex == -1" [disabled]="!match.results[i].player1.teamId || !match.results[i].player2.teamId" (click)="onRecordResult(i)">
+            <button ion-button icon-only *ngIf="match.results[i].player1.matchIndex == -1" [disabled]="!match.results[i].player1.teamId || !match.results[i].player2.teamId"
+              (click)="onRecordResult(i)">
               <ion-icon ios="ios-create" md="md-create"></ion-icon>
             </button>
-            <p *ngIf="match.results[i].player1.matchIndex != -1">
+            <p *ngIf="match.results[i].player1.score && match.results[i].player2.score">
               {{ match.results[i].player1.score }} : {{ match.results[i].player2.score }}
             </p>
-            <p *ngIf="match.results[i].player1.matchIndex != -1">比赛已记录</p>
+            <p *ngIf="match.results[i].player1.score && match.results[i].player2.score">比赛已记录</p>
           </ion-col>
           <ion-col col-4>
             <div (click)="selectTeam(1, i)">
-                <img *ngIf="match.results[i].player2.teamId" src="{{teams[match.results[i].player2.teamId].image}}" style="width:64px">
-                <img *ngIf="!match.results[i].player2.teamId" src="assets/img/nba2k18.jpg" alt="球队图标" style="width: 64px">
-                <p *ngIf="result.player2.teamId">{{teams[match.results[i].player2.teamId].name}}</p>
-                <p *ngIf="!result.player2.teamId">未知球队</p>
+              <img *ngIf="match.results[i].player2.teamId" src="{{teams[match.results[i].player2.teamId - 1].image}}" style="width:64px">
+              <img *ngIf="!match.results[i].player2.teamId" src="assets/img/nba2k18.jpg" alt="球队图标" style="width: 64px">
+              <p *ngIf="result.player2.teamId">{{teams[match.results[i].player2.teamId - 1].name}}</p>
+              <p *ngIf="!result.player2.teamId">未知球队</p>
             </div>
           </ion-col>
         </ion-row>

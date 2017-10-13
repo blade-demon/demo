@@ -34,8 +34,8 @@ export class RecordResultPage {
     this.matchId = this.matchInfo.results[0].player1.matchId;
 
     this.currentTeams = [];
-    this.currentTeams[0] = this.teams[this.matchInfo.results[this.resultIndex].player1.teamId];
-    this.currentTeams[1] = this.teams[this.matchInfo.results[this.resultIndex].player2.teamId];
+    this.currentTeams[0] = this.teams[this.matchInfo.results[this.resultIndex].player1.teamId - 1];
+    this.currentTeams[1] = this.teams[this.matchInfo.results[this.resultIndex].player2.teamId - 1];
 
     this.currentResults = [];
     this.currentResults[0] = this.matchInfo.results[this.resultIndex].player1;

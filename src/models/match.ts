@@ -7,7 +7,7 @@ export class Match {
     "player1": {
       "matchId": string,
       "playerId": string,
-      "teamId":string,
+      "teamId":number,
       "matchIndex": number,
       "score": number,
       "gotShots": number,
@@ -35,7 +35,7 @@ export class Match {
     }, "player2": {
       "matchId": string,
       "playerId": string,
-      "teamId":string,
+      "teamId":number,
       "matchIndex": number,
       "score": number,
       "gotShots": number,
