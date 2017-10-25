@@ -1,4 +1,4 @@
-import { Component } from "@angular/core"
+import { Component, ViewChild } from "@angular/core"
 import { NavController, ToastController, AlertController, ModalController, NavParams, LoadingController } from 'ionic-angular';
 import { RecordResultPage } from '../record-result/record-result';
 import { PlayerCreatePage } from '../player-create/player-create';
@@ -7,6 +7,10 @@ import { MatchServiceProvider } from '../../providers/match-service/match-servic
 import { Match } from '../../models/match';
 import { NBATeamsService } from '../../providers/nbateams.service';
 import { Api } from "../../providers/api/api";
+import { Storage } from '@ionic/storage';
+import * as randomize from 'randomatic';
+declare var AzureStorage: any;
+declare const Buffer;
 
 @Component({
   selector: 'page-match-create',
@@ -14,17 +18,21 @@ import { Api } from "../../providers/api/api";
 })
 
 export class MatchCreatePage {
+  @ViewChild('fileInput') fileInput;
+
   teams: any[];
   tournament: any;
   team: any;
-  match: Match;
-  // matchCount: number;
+  match: any;
   gameRule: string;
   players: any[];
-  resultDataTemplte: any;
 
   matchId: string;
   matchFinalResult: string;
+
+  showImagePlaceHolder: boolean;
+  resultImage: any;
+  blobStorageService: any;
 
   constructor(
     public navCtrl: NavController,
@@ -35,77 +43,22 @@ export class MatchCreatePage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
+    private storage: Storage,
     public api: Api) {
 
     this.teams = this.nbateamsservice.getNBATeams();
     this.players = [];
-    this.resultDataTemplte = {
-      "player1": {
-        "playerId": "",
-        "matchId": "",
-        "teamId": null,
-        "matchIndex": -1,
-        "score": null,
-        "gotShots": null,
-        "shots": null,
-        "gotThreePointsShots": null,
-        "threePointsShots": null,
-        "gotPenaltyShots": null,
-        "penaltyShots": null,
-        "fastBreakScore": null,
-        "freeThrowLaneScore": null,
-        "secondAttackScore": null,
-        "substituteScore": null,
-        "assists": null,
-        "offensiveRebounds": null,
-        "defensiveRebounds": null,
-        "steals": null,
-        "blockShots": null,
-        "turnovers": null,
-        "turnoverScores": null,
-        "teamFouls": null,
-        "maxLeadScore": null,
-        "possessionTime": "0",
-        "remainingPauses": null,
-        "win": false
-      }, "player2": {
-        "matchId": "",
-        "playerId": "",
-        "teamId": null,
-        "matchIndex": -1,
-        "score": null,
-        "gotShots": null,
-        "shots": null,
-        "gotThreePointsShots": null,
-        "threePointsShots": null,
-        "gotPenaltyShots": null,
-        "penaltyShots": null,
-        "fastBreakScore": null,
-        "freeThrowLaneScore": null,
-        "secondAttackScore": null,
-        "substituteScore": null,
-        "assists": null,
-        "offensiveRebounds": null,
-        "defensiveRebounds": null,
-        "steals": null,
-        "blockShots": null,
-        "turnovers": null,
-        "turnoverScores": null,
-        "teamFouls": null,
-        "maxLeadScore": null,
-        "possessionTime": "0",
-        "remainingPauses": null,
-        "win": false
-      }
-    };
-
+    this.showImagePlaceHolder = false;
     this.match = {
       "tournamentId": "",
       "gameRule": "BO1",
-      "playersId": ["", ""],
+      "playersId": [],
       "date": "",
-      "results": [this.resultDataTemplte]
+      "results": []
     }
+
+    // Azure Blob Storage Init
+    this.blobStorageService = AzureStorage.createBlobService("DefaultEndpointsProtocol=https;AccountName=storeapp;AccountKey=cwzlYfEC+rSZRmt2ywr4GqVKytXsMvh/a6bIgH2zzlYLu5BLa2fvqMw1fHHkrEEugUlLlhBmik+GRQG4TpUtpQ==;EndpointSuffix=core.chinacloudapi.cn");
   }
 
   // 添加选手
@@ -113,8 +66,8 @@ export class MatchCreatePage {
     const modal = this.modalCtrl.create(PlayerCreatePage);
     modal.onDidDismiss((player) => {
       if (player) {
-        // console.log(`选手${playerIndex}是: ${player.name}`);
-        this.match.playersId[playerIndex - 1] = player.gamepochPlayerId;
+        console.log(`选手${playerIndex}是: ${player.name}`);
+        this.match.playersId[playerIndex - 1] = player.celid;
         this.players[playerIndex - 1] = player;
         console.log(this.match);
       } else {
@@ -126,7 +79,7 @@ export class MatchCreatePage {
 
   // 选择球队
   selectTeam(playerIndex, matchIndex) {
-    if(!this.match.playersId[0] || !this.match.playersId[1] || this.match.results[matchIndex].player1.score || this.match.results[matchIndex].player2.score) {
+    if (!this.match.playersId[0] || !this.match.playersId[1] || this.match.results[matchIndex]) {
       return;
     }
     const modal = this.modalCtrl.create(TeamSelectPage);
@@ -161,161 +114,92 @@ export class MatchCreatePage {
         buttons: [
           {
             text: '取消',
-            handler: () => {}
+            handler: () => { }
           },
           {
             text: '确定',
             handler: () => {
               // 初始化服务
-              this.matchService.initialMatchInfo();
-              // 初始化数据
               this.initialData();
-              const alert = this.alertCtrl.create();
-              alert.setTitle('选择赛制');
-
-              alert.addInput({
-                type: 'radio',
-                label: 'BO1',
-                value: 'BO1',
-                checked: true
+              this.match.tournamentId = this.tournament._id;
+              // 清空图片
+              this.showImagePlaceHolder = false;
+              this.resultImage=null;
+              // 显示创建比赛对话框
+              const loading = this.loadingCtrl.create({
+                content: '创建比赛中...'
               });
-              alert.addInput({
-                type: 'radio',
-                label: 'BO3',
-                value: 'BO3',
-                checked: false
+              loading.present();
+              this.api.post('matches', {
+                "tournamentId": this.tournament,
+                "gameRule": "BO1"
+              }).subscribe(data => {
+                loading.dismiss();
+                this.matchId = data.json()._id;
+                this.match.gameRule = data.json().gameRule;
+                this.matchService.setMatchInfo(this.matchId);
+              }, (error) => {
+                loading.dismiss();
+                const alert = this.alertCtrl.create({
+                  title: '错误',
+                  subTitle: `创建比赛记录失败, ${error}`,
+                  buttons: ['确定']
+                });
+                alert.present();
               });
-              alert.addInput({
-                type: 'radio',
-                label: 'BO5',
-                value: 'BO5',
-                checked: false
-              });
-              alert.addButton({
-                text: '取消'
-              });
-              alert.addButton({
-                text: '确定',
-                handler: data => {
-                  const loading = this.loadingCtrl.create({
-                    content: '创建比赛中...'
-                  });
-                  loading.present();
-                  this.api.post('matches', {
-                    "tournamentId": this.tournament,
-                    "gameRule": data
-                  }).subscribe(data => {
-                    loading.dismiss();
-                    this.matchId = data.json()._id;
-                    this.match.gameRule = data.json().gameRule;
-                    console.log("本场比赛的matchId", this.matchId);
-                    console.log("本场比赛的gameRule", this.match.gameRule);
-                  }, (error) => {
-                    loading.dismiss();
-                    const alert = this.alertCtrl.create({
-                      title: '错误',
-                      subTitle: `创建比赛记录失败, ${error}`,
-                      buttons: ['确定']
-                    });
-                    alert.present();
-                  });
-                }
-              });
-              alert.present();
             }
           }
         ]
       });
       confirm.present();
     } else {
-      const alert = this.alertCtrl.create();
-      alert.setTitle('选择赛制');
-
-      alert.addInput({
-        type: 'radio',
-        label: 'BO1',
-        value: 'BO1',
-        checked: true
+      const loading = this.loadingCtrl.create({
+        content: '创建比赛中...'
       });
-      alert.addInput({
-        type: 'radio',
-        label: 'BO3',
-        value: 'BO3',
-        checked: false
+      loading.present();
+      this.api.post('matches', {
+        "tournamentId": this.tournament,
+        "gameRule": "BO1"
+      }).subscribe(data => {
+        loading.dismiss();
+        this.matchId = data.json()._id;
+        this.match.gameRule = data.json().gameRule;
+        this.matchService.setMatchInfo(this.matchId);
+      }, (error) => {
+        loading.dismiss();
+        const alert = this.alertCtrl.create({
+          title: '错误',
+          subTitle: `创建比赛记录失败, ${error}`,
+          buttons: ['确定']
+        });
+        alert.present();
       });
-      alert.addInput({
-        type: 'radio',
-        label: 'BO5',
-        value: 'BO5',
-        checked: false
-      });
-      alert.addButton({
-        text: '取消'
-      });
-      alert.addButton({
-        text: '确定',
-        handler: data => {
-          const loading = this.loadingCtrl.create({
-            content: '创建比赛中...'
-          });
-          loading.present();
-          this.api.post('matches', {
-            "tournamentId": this.tournament,
-            "gameRule": data
-          }).subscribe(data => {
-            loading.dismiss();
-            this.matchId = data.json()._id;
-            this.match.gameRule = data.json().gameRule;
-            this.matchService.setMatchInfo(this.matchId);
-            console.log("本场比赛的matchId", this.matchId);
-            console.log("本场比赛的gameRule", this.match.gameRule);
-          }, (error) => {
-            loading.dismiss();
-            const alert = this.alertCtrl.create({
-              title: '错误',
-              subTitle: `创建比赛记录失败, ${error}`,
-              buttons: ['确定']
-            });
-            alert.present();
-          });
-        }
-      });
-      alert.present();
     }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad Player Login page.');
-  }
-
   ionViewWillEnter() {
-    this.matchService.getMatchInfo().then(data => {
-      if (data) {
-        // 已存在缓存比赛结果
-        console.log("已缓存的比赛数据：" + data);
-        this.matchId = data[0].matchId;
-        let matchCount = this.getMatchCount();
-        let currentMatchCount = data.length / 2;
-        console.log("matchCount", matchCount);
-        console.log("currentMatchCount", currentMatchCount);
-        if (matchCount >= currentMatchCount) {
-          console.log("已记录比赛记录", this.match.results);
-          this.addNewResult(this.match.results);
-          console.log("待更新比赛记录", this.match.results);
-        }
-        this.matchService.getTournament().then(data => {
-          this.tournament = JSON.parse(data);
-        });
-        console.log(this.tournament);
-      } else {
-        // 新比赛
-        this.tournament = this.navParams.get("tournament");
-        console.log(this.tournament);
-        this.matchService.setTournament(JSON.stringify(this.tournament));
-      }
-    }, (error) => {
-      console.log(error);
-    });
+    // 已存在缓存比赛结果
+    //   console.log("已缓存的比赛数据：" + data);
+    //   this.matchId = data[0].matchId;
+    //   let matchCount = this.getMatchCount();
+    //   let currentMatchCount = data.length / 2;
+    //   console.log("matchCount", matchCount);
+    //   console.log("currentMatchCount", currentMatchCount);
+    //   if (matchCount >= currentMatchCount) {
+    //     console.log("已记录比赛记录", this.match.results);
+    //     this.addNewResult(this.match.results);
+    //     console.log("待更新比赛记录", this.match.results);
+    //   }
+    //   this.matchService.getTournament().then(data => {
+    //     this.tournament = JSON.parse(data);
+    //   });
+    //   console.log(this.tournament);
+    // } else {
+    // 新比赛
+    this.tournament = this.navParams.get("tournament");
+    this.match.tournamentId = this.tournament._id;
+    this.storage.set("tournament", this.tournament._id);
+    // }
   }
 
   // 记录比赛详细数据
@@ -418,73 +302,157 @@ export class MatchCreatePage {
   initialData() {
     this.players = [];
     this.match.playersId = [];
-    this.resultDataTemplte = {
-      "player1": {
-        "playerId": "",
-        "matchId": "",
-        "teamId": null,
-        "matchIndex": -1,
-        "score": null,
-        "gotShots": null,
-        "shots": null,
-        "gotThreePointsShots": null,
-        "threePointsShots": null,
-        "gotPenaltyShots": null,
-        "penaltyShots": null,
-        "fastBreakScore": null,
-        "freeThrowLaneScore": null,
-        "secondAttackScore": null,
-        "substituteScore": null,
-        "assists": null,
-        "offensiveRebounds": null,
-        "defensiveRebounds": null,
-        "steals": null,
-        "blockShots": null,
-        "turnovers": null,
-        "turnoverScores": null,
-        "teamFouls": null,
-        "maxLeadScore": null,
-        "possessionTime": "0",
-        "remainingPauses": null,
-        "win": false
-      }, "player2": {
-        "matchId": null,
-        "playerId": null,
-        "teamId": null,
-        "matchIndex": -1,
-        "score": null,
-        "gotShots": null,
-        "shots": null,
-        "gotThreePointsShots": null,
-        "threePointsShots": null,
-        "gotPenaltyShots": null,
-        "penaltyShots": null,
-        "fastBreakScore": null,
-        "freeThrowLaneScore": null,
-        "secondAttackScore": null,
-        "substituteScore": null,
-        "assists": null,
-        "offensiveRebounds": null,
-        "defensiveRebounds": null,
-        "steals": null,
-        "blockShots": null,
-        "turnovers": null,
-        "turnoverScores": null,
-        "teamFouls": null,
-        "maxLeadScore": null,
-        "possessionTime": "0",
-        "remainingPauses": null,
-        "win": false
-      }
-    };
 
     this.match = {
       "tournamentId": "",
       "gameRule": "BO1",
-      "playersId": ["", ""],
+      "playersId": [],
       "date": "",
-      "results": [this.resultDataTemplte]
+      "results": []
     }
     this.matchFinalResult = "";
   }
+
+  // 上传数据
+  uploadData() {
+    const loading = this.loadingCtrl.create({
+      content: '数据上传中...'
+    });
+    loading.present();
+
+    let savedArray = [];
+    for (let i = 0; i < this.match.results.length; i++) {
+      savedArray.push(randomize('Aa0', 20));
+    }
+    console.log(savedArray);
+    // 上传图片到Blob Storage
+    this.uploadImg(this.match.results, savedArray, (err, result) => {
+      this.uploadDataToServer(savedArray).then(() => {
+        loading.dismiss().then(() => {
+          let alert = this.alertCtrl.create({
+            subTitle: '数据上传成功!',
+            buttons: ['确定']
+          });
+          alert.present();
+        });
+      }).catch(e => {
+        alert(e);
+      });
+    })
+  }
+
+  // 上传最终数据到服务器
+  uploadDataToServer(imageArray) {
+    return new Promise((resolve, reject) => {
+      imageArray.forEach(image => {
+        // 上传成功后post结果到服务器
+        let matchResult = {
+          "matchId": this.matchId,
+          "matchIndex": 0,
+          "players": this.match.playersId,
+          "resultImages": `https://storeapp.blob.core.chinacloudapi.cn/match/${image}.jpeg`
+        };
+        this.api.post('matchresults', matchResult).subscribe((resp) => {
+          resolve();
+        }, error => {
+          reject(error);
+        });
+      });
+    });
+  }
+
+
+  getPicture() {
+    this.fileInput.nativeElement.click();
+  }
+
+  processWebImage(event) {
+    let reader = new FileReader();
+    reader.onload = (readerEvent) => {
+      let imageData = (readerEvent.target as any).result;
+      // this.form.patchValue({ 'profilePic': imageData });
+      this.resultImage = imageData;
+      this.match.results.push(imageData);
+    };
+    if (event.target.files[0]) {
+      this.showImagePlaceHolder = true;
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+
+  getProfileImageStyle() {
+    return 'url(' + this.resultImage + ')'
+  }
+
+  // 确认是否可以上传照片
+  canUpload() {
+    return this.match.tournamentId != "" && this.match.gameRule != "" && this.match.results.length != 0 && this.match.playersId.length === 2;
+  }
+
+  // 上传图片
+  uploadImg(files: any[], savedArray, callback) {
+    if (!files.length) {
+      return;
+    }
+
+    // 创建容器
+    this.createContainer("match", (error, result) => {
+      if (!error) {
+        // 上传Blob
+        this.uploadFiles("match", files, savedArray, function (error, result) {
+          if (!error) {
+            callback(null, "上传结果：" + result);
+          } else {
+            callback(error, "上传失败：" + error);
+          }
+        });
+      } else {
+        callback(error, "上传失败：" + error);
+      }
+    });
+  }
+
+  // 检查container是否存在, 如果不存在就为门店创建一个容器
+  createContainer(container, cb) {
+    this.blobStorageService.createContainerIfNotExists(container, { publicAccessLevel: 'blob' }, function (error, result, response) {
+      if (!error) {
+        if (result) {
+          cb(null, "容器已经创建");
+        } else {
+          cb(null, "容器已存在");
+        }
+      } else {
+        cb(error, "出现错误");
+      }
+    });
+  }
+
+  // 上传文件
+  uploadFiles(containerName, files, savedArray, callback) {
+    var finished = 0;
+    var blobService = this.blobStorageService;
+    // console.log(files);
+    files.forEach(function (file, index) {
+      // var blobName = file.replace(/^.*[\\\/]/, '');
+      var fileInfo = [];
+      fileInfo = file.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      // console.log(fileInfo);
+      var type = fileInfo[1];
+      //alert(this.employeeInfo.Name);
+      var blobName = savedArray[index] + ".jpeg";
+      var fileBuffer = new Buffer(fileInfo[2], "base64");
+      // console.log(fileBuffer);
+      blobService.createBlockBlobFromText(containerName, blobName, fileBuffer, { contentType: type }, function (error, result, response) {
+        finished++;
+        if (error) {
+          callback(error);
+        } else {
+          if (finished === files.length) {
+            callback(null, result);
+          }
+        }
+      });
+    });
+  }
+
 }

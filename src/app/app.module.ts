@@ -29,7 +29,7 @@ import { MatchServiceProvider } from '../providers/match-service/match-service';
 import { TournamentsProvider } from '../providers/tournaments/tournaments';
 import { StorageServiceProvider } from '../providers/storage-service/storage-service';
 import { IonicStorageModule } from '@ionic/storage';
-
+import { UploadProvider } from '../providers/upload/upload';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,10 @@ import { IonicStorageModule } from '@ionic/storage';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: '__matchdb',
+         driverOrder: ['indexeddb', 'sqlite', 'websql']
+    }),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -69,6 +72,7 @@ import { IonicStorageModule } from '@ionic/storage';
   ],
   providers: [
     Api,
+    Storage,
     TournamentsProvider,
     MatchesProvider,
     PlayersProvider,
@@ -79,7 +83,8 @@ import { IonicStorageModule } from '@ionic/storage';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     NBATeamsService,
-    StorageServiceProvider
+    StorageServiceProvider,
+    UploadProvider
   ]
 })
 export class AppModule { }

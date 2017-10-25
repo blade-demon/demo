@@ -12,7 +12,7 @@
     <ion-list>
         <button ion-item *ngFor="let player of currentPlayers; let i = index" (click)="choosePlayer(player, i)">
           <ion-avatar item-start>
-            <img [src]="player.headimg" />
+            <img src="{{ player.headimgurl}}" />
           </ion-avatar>
           <h2>{{player.name}}</h2>
           <p>{{player.desc}}</p>

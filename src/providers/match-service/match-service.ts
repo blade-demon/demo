@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Match } from "../../models/match";
+// import { Match } from "../../models/match";
 import { Storage } from "@ionic/storage";
 
 @Injectable()
@@ -12,14 +12,14 @@ export class MatchServiceProvider {
 
   // 初始化MatchInfo
   initialMatchInfo() {
-    // this.storage.remove("matchResult");
+    this.storage.remove("matchResult");
   }
 
   // 设置比赛信息
   setMatchInfo(data) {
-    let matchInfo = data;
+    // let matchInfo = data;
     // 缓存比赛数据
-    this.storage.set("matchResult", JSON.stringify(data));
+    this.storage.set("matchResult", data);
 
     // this.storage.set("matchId", matchInfo[0].matchId);
     // this.storage.set("player1Id", matchInfo[0].playerId);

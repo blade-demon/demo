@@ -9,7 +9,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
   <ion-list *ngIf="!matchId">
     <ion-item>
       <p text-wrap>赛事信息：本项赛事目前为积分赛，积分前两名的选手将获得100积分。</p>
@@ -28,17 +28,21 @@
       <ion-grid>
         <ion-row style="text-align:center; align-items: center">
           <ion-col col-4>
+            <p>客场</p>
             <img class="head-image" *ngIf="!players[0]" src="assets/img/doubt.png" alt="选手1头像" (click)="selectPlayer(1)">
-            <img class="head-image" *ngIf="players[0]" src="{{players[0].headimg}}" alt="选手1头像" (click)="selectPlayer(1)">
+            <img class="head-image" *ngIf="players[0]" src="{{players[0].headimgurl}}" alt="选手1头像" (click)="selectPlayer(1)">
             <p *ngIf="players[0]">{{ players[0].nickname }}</p>
             <small *ngIf="players[0]">{{players[0].gamepochPlayerId }}</small>
           </ion-col>
           <ion-col col-4>
-            {{match.gameRule}}
+            VS
+            <br>
+            <button ion-button></button>
           </ion-col>
           <ion-col col-4>
-            <img class="head-image" *ngIf="players[1]" src="{{players[1].headimg}}" alt="选手2头像" (click)="selectPlayer(2)">
+            <p>主场</p>
             <img class="head-image" *ngIf="!players[1]" src="assets/img/doubt.png" alt="选手2头像" (click)="selectPlayer(2)">
+            <img class="head-image" *ngIf="players[1]" src="{{players[1].headimgurl}}" alt="选手2头像" (click)="selectPlayer(2)">
             <p *ngIf="players[1]">{{ players[1].nickname }}</p>
             <small *ngIf="players[1]">{{players[1].gamepochPlayerId }}</small>
           </ion-col>
@@ -47,7 +51,7 @@
     </ion-item>
 
     <!-- 显示所有比赛结果 -->
-    <ion-item *ngFor="let result of match.results; let i = index">
+    <!-- <ion-item *ngFor="let result of match.results; let i = index">
       <ion-grid>
         <ion-row style="text-align:center; align-items: center">
           <ion-col col-4>
@@ -59,11 +63,10 @@
             </div>
           </ion-col>
           <ion-col col-4>
-            <button ion-button icon-only *ngIf="match.results[i].player1.matchIndex == -1" [disabled]="!match.results[i].player1.teamId || !match.results[i].player2.teamId"
-              (click)="onRecordResult(i)">
-              <ion-icon ios="ios-create" md="md-create"></ion-icon>
-            </button>
-            <p *ngIf="match.results[i].player1.score && match.results[i].player2.score">
+            <!-- <input type="file" *ngIf="match.results[i].player1.matchIndex == -1" [disabled]="!match.results[i].player1.teamId || !match.results[i].player2.teamId" (click)="chooseImage(i)" /> -->
+              <!-- <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+            </button> -->
+            <!-- <p *ngIf="match.results[i].player1.score && match.results[i].player2.score">
               {{ match.results[i].player1.score }} : {{ match.results[i].player2.score }}
             </p>
             <p *ngIf="match.results[i].player1.score && match.results[i].player2.score">比赛已记录</p>
@@ -78,28 +81,23 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+    </ion-item>-->
+    <ion-item>
+      <p>温馨提示：照片不宜过大，最好是横向照片</p>
+      <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
+      <ion-card class="profile-image-wrapper" (click)="getPicture()">
+          <div class="profile-image-placeholder" *ngIf="!showImagePlaceHolder">
+              <ion-icon ios="ios-images" md="md-images"></ion-icon>
+          </div>
+          <img *ngIf="matchId" src={{resultImage}} />
+          <!-- <div class="profile-image" [style.backgroundImage]="getProfileImageStyle()" *ngIf="this.match.results"></div> -->
+      </ion-card>
     </ion-item>
-    <ion-item *ngIf="matchFinalResult">
+
+    <!-- <ion-item *ngIf="matchFinalResult">
       <p style="text-align:center">{{ matchFinalResult }}</p>
-    </ion-item>
+    </ion-item> -->
     <!-- 显示比赛结果 -->
   </ion-list>
-  <!-- <ion-list>
-        <ion-item-group *ngFor="let player of players">
-            <ion-item-divider color="primary">选手</ion-item-divider>
-            <ion-item-sliding>
-                <ion-item>
-                    <ion-avatar item-start>
-                        <img src="{{player.headimg}}">
-                    </ion-avatar>
-                    <h2>{{player.nickname}}</h2>
-                    <span>{{player.userid}}</span>
-                    <button ion-button clear item-end (click)="remove(player)">
-                        <ion-icon ios="ios-trash" md="md-trash"></ion-icon>
-                    </button>
-                </ion-item>
-            </ion-item-sliding>
-            <ion-item></ion-item>
-        </ion-item-group>
-    </ion-list> -->
+  <button ion-button full *ngIf="matchId" [disabled]="!canUpload()" (click)="uploadData()">上传比赛结果</button>
 </ion-content>

@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { ViewController, NavController, NavParams } from 'ionic-angular';
-
 import { Player } from '../../models/Player';
 import { PlayersProvider } from '../../providers/providers';
-import { Api } from '../../providers/api/api';
-// import { PlayerDetailPage } from '../player-detail/player-detail';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-player-create',
@@ -12,23 +10,22 @@ import { Api } from '../../providers/api/api';
 })
 export class PlayerCreatePage {
   userInput: { id: string };
-  players: PlayersProvider;
+  players: any;
   currentPlayers: Player[] = [];
   constructor(public navCtrl: NavController,
     public viewCtrl: ViewController,
     public navParams: NavParams,
-    private api: Api) {}
+    private storage: Storage,
+    private playersProvider: PlayersProvider) {}
 
-  ionViewDidLoad() {
-    // console.log('ionViewDidLoad PlayerCreatePage');
-  }
+  ionViewDidLoad() {}
 
   ionViewWillEnter() {
     console.log("进入添加选手界面");
-    this.api.get('players').subscribe(data => {
-      this.players = data.json();
-      console.log(this.players);
-    });
+    this.storage.get("players").then(
+      players => this.players = JSON.parse(players),
+      error => console.log(error)
+    );
   }
 
   shouldShowCancel() {
@@ -45,8 +42,8 @@ export class PlayerCreatePage {
     for (let index in this.players) {
       playersArray.push(this.players[index]);
     }
-    // 通过GamepochPlayerId进行筛选
-    this.currentPlayers = this.findByPlayerId(playersArray, { gamepochPlayerId: val });
+    // 通过celid进行筛选
+    this.currentPlayers = this.findByPlayerId(playersArray, { celid: val });
   }
 
   onCancel() {

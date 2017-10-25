@@ -3,6 +3,10 @@ import 'rxjs/add/operator/map';
 import { NavController, AlertController, LoadingController } from 'ionic-angular';
 import { MatchCreatePage } from '../match-create/match-create';
 import { Api } from "../../providers/api/api";
+import { PlayersProvider } from '../../providers/providers';
+import { TournamentsProvider } from '../../providers/providers';
+import { Storage } from '@ionic/storage';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -13,9 +17,12 @@ export class HomePage {
     month: '2017-10-01'
   }
   constructor(public navCtrl: NavController,
-    private api: Api,
     public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController) {
+    public loadingCtrl: LoadingController,
+    private playersProvider : PlayersProvider,
+    private tournamentsProvider : TournamentsProvider,
+    private storage: Storage) {
+      this.storage.remove('matchResult');
   }
 
   ionViewWillEnter() {
@@ -23,9 +30,12 @@ export class HomePage {
       content: '加载数据中...'
     });
     loading.present();
-    this.api.get('tournaments').subscribe(data => {
-      loading.dismiss();
-      this.tours = data.json();
+    this.tournamentsProvider.query().subscribe(tournaments => {
+      this.playersProvider.query().subscribe(players => {
+        this.storage.set("players", JSON.stringify(players));
+        this.tours = tournaments;
+        loading.dismiss();
+      });
     }, (error) => {
       loading.dismiss();
       const alert = this.alertCtrl.create({

@@ -13,7 +13,7 @@ export class PlayersProvider {
   }
 
   query(params?: any) {
-    return this.api.get('/players', params)
+    return this.api.get('players', params)
       .map(resp => resp.json());
   }
 
