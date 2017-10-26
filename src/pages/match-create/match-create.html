@@ -12,7 +12,7 @@
 <ion-content padding>
   <ion-list *ngIf="!matchId">
     <ion-item>
-      <p text-wrap>赛事信息：本项赛事目前为积分赛，积分前两名的选手将获得100积分。</p>
+      <!-- <p text-wrap>赛事信息：本项赛事目前为积分赛，积分前两名的选手将获得100积分。</p> -->
     </ion-item>
   </ion-list>
   <ion-list *ngIf="matchId">
@@ -35,9 +35,9 @@
             <small *ngIf="players[0]">{{players[0].gamepochPlayerId }}</small>
           </ion-col>
           <ion-col col-4>
-            VS
-            <br>
-            <button ion-button></button>
+            <button ion-button color="light" (click)="doSwap()">
+                <ion-icon ios="ios-swap" md="md-swap"></ion-icon>
+            </button>
           </ion-col>
           <ion-col col-4>
             <p>主场</p>
@@ -83,7 +83,7 @@
       </ion-grid>
     </ion-item>-->
     <ion-item>
-      <p>温馨提示：照片不宜过大，最好是横向照片</p>
+      <p>温馨提示：请对应主客场顺序上传选手信息，请横向拍摄比赛数据照片。</p>
       <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
       <ion-card class="profile-image-wrapper" (click)="getPicture()">
           <div class="profile-image-placeholder" *ngIf="!showImagePlaceHolder">

@@ -313,6 +313,15 @@ export class MatchCreatePage {
     this.matchFinalResult = "";
   }
 
+  // 交换顺序
+  doSwap() {
+    console.log("修改之前", this.players);
+    this.players = this.players.reverse();
+    this.match.playersId = this.match.playersId.reverse();
+    console.log("交换顺序");
+    console.log(this.players);
+  }
+
   // 上传数据
   uploadData() {
     const loading = this.loadingCtrl.create({

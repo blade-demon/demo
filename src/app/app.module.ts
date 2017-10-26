@@ -7,10 +7,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
-import { TabsPage} from '../pages/tabs/tabs';
 import { HomePage } from '../pages/home/home';
 import { DataPage } from '../pages/data/data';
-import { SettingsPage } from '../pages/settings/settings';
 import { DetailPage } from '../pages/detail/detail';
 import { TeamSelectPage } from '../pages/team-select/team-select';
 import { MatchCreatePage } from '../pages/match-create/match-create';
@@ -34,10 +32,8 @@ import { UploadProvider } from '../providers/upload/upload';
 @NgModule({
   declarations: [
     MyApp,
-    TabsPage,
     HomePage,
     DataPage,
-    SettingsPage,
     DetailPage,
     TeamSelectPage,
     MatchCreatePage,
@@ -58,10 +54,8 @@ import { UploadProvider } from '../providers/upload/upload';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    TabsPage,
     HomePage,
     DataPage,
-    SettingsPage,
     DetailPage,
     TeamSelectPage,
     MatchCreatePage,
@@ -72,7 +66,7 @@ import { UploadProvider } from '../providers/upload/upload';
   ],
   providers: [
     Api,
-    Storage,
+    IonicStorageModule,
     TournamentsProvider,
     MatchesProvider,
     PlayersProvider,
