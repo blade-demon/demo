@@ -8,7 +8,7 @@ import { Http, RequestOptions, URLSearchParams } from '@angular/http';
  */
 @Injectable()
 export class Api {
-  url: string = 'https://match-assistant-ziweigamepoch.c9users.io/api';
+  url: string = 'http://gma.gamepoch.com/api';
   constructor(public http: Http) {
   }
 
