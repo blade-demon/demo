@@ -1,4 +1,4 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+NBA 2K18 电竞助手上传选手比赛数据至服务器。
 
 ## How to use this template
 
