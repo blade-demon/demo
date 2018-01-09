@@ -383,9 +383,10 @@ export class MatchCreatePage {
       this.resultImage = imageData;
       this.match.results.push(imageData);
     };
-    if (event.target.files[0]) {
+    if (event.target.files) {
       this.showImagePlaceHolder = true;
       reader.readAsDataURL(event.target.files[0]);
+      reader.readAsDataURL(event.target.files[1]);
     }
   }
 

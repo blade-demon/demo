@@ -27,7 +27,6 @@ import { MatchServiceProvider } from '../providers/match-service/match-service';
 import { TournamentsProvider } from '../providers/tournaments/tournaments';
 import { StorageServiceProvider } from '../providers/storage-service/storage-service';
 import { IonicStorageModule } from '@ionic/storage';
-import { UploadProvider } from '../providers/upload/upload';
 
 @NgModule({
   declarations: [
@@ -78,7 +77,6 @@ import { UploadProvider } from '../providers/upload/upload';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     NBATeamsService,
     StorageServiceProvider,
-    UploadProvider
   ]
 })
 export class AppModule { }
